@@ -14,7 +14,7 @@ const courseSchema = z.object({
   description: z.string().min(1, 'Description is required'),
   duration: z.string().min(1, 'Duration is required'),
   courseTotalDuration: z.number().min(1, 'Total duration must be at least 1'),
-  features: z.string().min(1, 'Features are required'),
+  features: z.array(z.string().min(1, 'Feature cannot be empty')).min(1, 'At least one feature is required'),
   price: z.number().min(0, 'Price must be positive'),
   discountPrice: z.number().min(0, 'Discount price must be positive'),
   earlyBirdTitle: z.string().min(1, 'Early bird title is required'),
@@ -25,6 +25,7 @@ const courseSchema = z.object({
 const CourseForm = ({ isOpen, onClose, course = null, onSuccess }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [features, setFeatures] = useState(['']);
   
   const {
     register,
@@ -40,7 +41,7 @@ const CourseForm = ({ isOpen, onClose, course = null, onSuccess }) => {
       description: '',
       duration: '',
       courseTotalDuration: 1,
-      features: '',
+      features: [''],
       price: 0,
       discountPrice: 0,
       earlyBirdTitle: '',
@@ -53,21 +54,27 @@ const CourseForm = ({ isOpen, onClose, course = null, onSuccess }) => {
     if (isOpen) {
       fetchCategories();
       if (course) {
+        const courseFeatures = Array.isArray(course.features) 
+          ? course.features.filter(f => f && f.trim().length > 0)
+          : (course.features ? [course.features] : ['']);
+        
         const courseForForm = {
           ...course,
-          features: Array.isArray(course.features) ? course.features.join(', ') : course.features || '',
+          features: courseFeatures.length > 0 ? courseFeatures : [''],
           categories: Array.isArray(course.categories) ? course.categories.map(cat => 
             typeof cat === 'object' ? cat._id : cat
           ) : []
         };
+        setFeatures(courseFeatures.length > 0 ? courseFeatures : ['']);
         reset(courseForForm);
       } else {
+        setFeatures(['']);
         reset({
           name: '',
           description: '',
           duration: '',
           courseTotalDuration: 1,
-          features: '',
+          features: [''],
           price: 0,
           discountPrice: 0,
           earlyBirdTitle: '',
@@ -90,12 +97,33 @@ const CourseForm = ({ isOpen, onClose, course = null, onSuccess }) => {
     }
   };
 
+  const addFeature = () => {
+    const newFeatures = [...features, ''];
+    setFeatures(newFeatures);
+    setValue('features', newFeatures);
+  };
+
+  const removeFeature = (index) => {
+    if (features.length > 1) {
+      const newFeatures = features.filter((_, i) => i !== index);
+      setFeatures(newFeatures);
+      setValue('features', newFeatures);
+    }
+  };
+
+  const updateFeature = (index, value) => {
+    const newFeatures = [...features];
+    newFeatures[index] = value;
+    setFeatures(newFeatures);
+    setValue('features', newFeatures);
+  };
+
   const onSubmit = async (data) => {
     setLoading(true);
     try {
       const courseData = {
         ...data,
-        features: data.features.split(',').map(f => f.trim()).filter(f => f.length > 0),
+        features: data.features.filter(f => f && f.trim().length > 0),
         categories: Array.isArray(data.categories) ? data.categories : []
       };
       
@@ -206,15 +234,36 @@ const CourseForm = ({ isOpen, onClose, course = null, onSuccess }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-800 mb-1">
+          <label className="block text-sm font-medium text-gray-800 mb-2">
             Features <span className="text-red-500">*</span>
           </label>
-          <textarea
-            rows={3}
-            className="block w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-400 resize-none"
-            placeholder="Enter features separated by commas (e.g., Feature 1, Feature 2, Feature 3)"
-            {...register('features')}
-          />
+          <div className="space-y-2">
+            {features.map((feature, index) => (
+              <div key={index} className="flex gap-2">
+                <Input
+                  placeholder={`Feature ${index + 1}`}
+                  value={feature}
+                  onChange={(e) => updateFeature(index, e.target.value)}
+                  className="flex-1"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeFeature(index)}
+                  disabled={features.length === 1}
+                  className="px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 disabled:text-gray-400 disabled:cursor-not-allowed border border-red-300 hover:border-red-400 disabled:border-gray-300 rounded-md transition-colors"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addFeature}
+              className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 border border-blue-300 hover:border-blue-400 rounded-md transition-colors"
+            >
+              + Add Feature
+            </button>
+          </div>
           {errors.features && (
             <p className="text-sm text-red-600 mt-1">{errors.features.message}</p>
           )}
