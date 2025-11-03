@@ -41,16 +41,20 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
       if (!token || !isTokenValid(token)) {
-        localStorage.removeItem("token"); // Remove invalid token
+        localStorage.removeItem("adminToken"); // Remove invalid token
+        document.cookie = 'adminToken=; path=/; max-age=0'; // Clear cookie
         setLoading(false);
         return;
       }
       else {
+        // Ensure cookie is set if localStorage has token
+        document.cookie = `adminToken=${token}; path=/; max-age=${24 * 60 * 60}; SameSite=Lax`;
         setAdmin({ token });
       }
     } catch (error) {
       console.error("Error checking auth:", error);
       localStorage.removeItem('adminToken');
+      document.cookie = 'adminToken=; path=/; max-age=0';
       setAdmin(null);
     }
     setLoading(false);
@@ -59,8 +63,15 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await apiClient.login(credentials);
-      localStorage.setItem('adminToken', response.token);
-      setAdmin({ token: response.token });
+      const token = response.token;
+      
+      // Save to localStorage for client-side access
+      localStorage.setItem('adminToken', token);
+      
+      // Also set as cookie for middleware to access
+      document.cookie = `adminToken=${token}; path=/; max-age=${24 * 60 * 60}; SameSite=Lax`;
+      
+      setAdmin({ token });
       return response;
     } catch (error) {
       throw error;
@@ -69,6 +80,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('adminToken');
+    // Clear cookie
+    document.cookie = 'adminToken=; path=/; max-age=0';
     setAdmin(null);
   };
 

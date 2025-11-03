@@ -15,9 +15,9 @@ import {
 } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-  { name: 'Courses', href: '/courses', icon: BookOpenIcon },
-  { name: 'Categories', href: '/categories', icon: FolderIcon },
+  { name: 'Dashboard', href: '/admin/dashboard', icon: HomeIcon },
+  { name: 'Courses', href: '/admin/courses', icon: BookOpenIcon },
+  { name: 'Categories', href: '/admin/categories', icon: FolderIcon },
   // { name: 'Users', href: '/users', icon: UsersIcon },
   // { name: 'Settings', href: '/settings', icon: CogIcon },
 ];

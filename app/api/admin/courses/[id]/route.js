@@ -8,7 +8,7 @@ async function handler(req, { params }) {
   try {
     await connectDB();
 
-    const id = params.id;
+    const id = (await params).id;
 
     if (req.method === 'PUT') {
       const body = await req.json();

@@ -3,7 +3,7 @@ import connectDB from '../../../lib/db';
 import Course from '../../../models/Course';
 import Category from '../../../models/Category';
 
-export async function GET(req) {
+export async function GET() {
   try {
     await connectDB();
 

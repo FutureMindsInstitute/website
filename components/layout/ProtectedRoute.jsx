@@ -10,7 +10,7 @@ export default function ProtectedRoute({ children }) {
 
   useEffect(() => {
     if (!loading && !admin) {
-      router.push('/login');
+      router.push('/admin/login');
     }
   }, [admin, loading, router]);
 

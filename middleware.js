@@ -5,10 +5,21 @@ import { createRateLimiter } from './lib/rateLimit';
 const globalRateLimiter = createRateLimiter(15 * 60 * 1000, 200);
 
 export function middleware(request) {
+  const { pathname } = request.nextUrl;
+
+  // Protect /admin routes (except /admin/login)
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+    // Check for admin token in cookie or header
+    const adminToken = request.cookies.get('adminToken')?.value || 
+                       request.headers.get('authorization')?.replace('Bearer ', '');
+    
+    if (!adminToken) {
+      return NextResponse.redirect(new URL('/admin/login', request.url));
+    }
+  }
+
   // Apply rate limiting to API routes
-  if (request.nextUrl.pathname.startsWith('/api')) {
-    // Create a mock req/res object for rate limiter
-    const url = request.nextUrl;
+  if (pathname.startsWith('/api')) {
     const ip = request.ip || 
                request.headers.get('x-forwarded-for') || 
                request.headers.get('x-real-ip') || 
@@ -23,5 +34,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: '/api/:path*',
+  matcher: ['/api/:path*', '/admin/:path*'],
 };
