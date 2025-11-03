@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '../../../../../lib/db';
 import User from '../../../../../models/User';
+import Course from '../../../../../models/Course';
 import userAuth from '../../../../../middleware/userAuth';
 
 async function handler(req) {

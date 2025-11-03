@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '../../../lib/db';
 import Course from '../../../models/Course';
-import Category from '../../../models/Category'; // Import Category to register it with Mongoose
+import Category from '../../../models/Category';
 
 export async function GET(req) {
   try {
