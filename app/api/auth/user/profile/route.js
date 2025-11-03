@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import connectDB from '../../../../lib/db';
-import User from '../../../../models/User';
-import userAuth from '../../../../middleware/userAuth';
+import connectDB from '../../../../../lib/db';
+import User from '../../../../../models/User';
+import userAuth from '../../../../../middleware/userAuth';
 
 async function handler(req) {
   try {
