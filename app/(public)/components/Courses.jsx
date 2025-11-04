@@ -125,32 +125,19 @@ const Courses = () => {
         </div>
   
         <div className="space-y-3">
-          {course.brochurePdf && (() => {
-            // Generate a clean filename from course name
-            const sanitizeFileName = (name) => {
-              return name
-                .replace(/[^a-z0-9]/gi, '_')
-                .replace(/_+/g, '_')
-                .replace(/^_|_$/g, '')
-                .toLowerCase();
-            };
-            const fileName = `${sanitizeFileName(course.name)}_brochure.pdf`;
-            
-            return (
-              <a
-                href={course.brochurePdf}
-                target="_blank"
-                rel="noopener noreferrer"
-                download={fileName}
-                className="w-full flex items-center justify-center gap-2 bg-slate-700 text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-600 transition duration-300 shadow-md hover:shadow-slate-400/20 cursor-pointer"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Download Brochure
-              </a>
-            );
-          })()}
+          {course.brochurePdf && (
+            <a
+              href={course.brochurePdf}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 bg-slate-700 text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-600 transition duration-300 shadow-md hover:shadow-slate-400/20 cursor-pointer"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              View Brochure
+            </a>
+          )}
           
           <button
             onClick={onClick}

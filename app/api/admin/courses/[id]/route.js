@@ -3,7 +3,6 @@ import connectDB from '../../../../../lib/db';
 import Course from '../../../../../models/Course';
 import Category from '../../../../../models/Category';
 import adminAuth from '../../../../../middleware/adminAuth';
-import { deleteBrochureFile } from '../../../../../lib/serverUtils';
 
 async function handler(req, { params }) {
   try {
@@ -13,8 +12,6 @@ async function handler(req, { params }) {
 
     if (req.method === 'PUT') {
       const body = await req.json();
-      console.log('Update course - received body:', body);
-
       // Handle features - convert string to array if needed
       if (body.features && typeof body.features === 'string') {
         body.features = body.features.split(',').map(f => f.trim()).filter(f => f.length > 0);
@@ -25,24 +22,10 @@ async function handler(req, { params }) {
         body.categories = body.categories.split(',').map(c => c.trim()).filter(c => c.length > 0);
       }
 
-      // Handle brochurePdf - ensure empty strings are converted to null
       if (body.brochurePdf !== undefined) {
         body.brochurePdf = body.brochurePdf && body.brochurePdf.trim() !== '' ? body.brochurePdf.trim() : null;
       }
-      console.log('Update course - brochurePdf value:', body.brochurePdf);
-      console.log('Update course - body to set:', JSON.stringify(body, null, 2));
 
-      // Get the current course to check for existing brochure
-      const currentCourse = await Course.findById(id);
-      if (currentCourse && currentCourse.brochurePdf) {
-        // If brochurePdf is being changed or removed, delete the old file
-        if (body.brochurePdf !== currentCourse.brochurePdf) {
-          console.log('Deleting old brochure:', currentCourse.brochurePdf);
-          await deleteBrochureFile(currentCourse.brochurePdf);
-        }
-      }
-
-      // Build update object explicitly to ensure brochurePdf is included
       const updateData = {
         name: body.name,
         description: body.description,
@@ -54,7 +37,7 @@ async function handler(req, { params }) {
         earlyBirdTitle: body.earlyBirdTitle,
         isActive: body.isActive !== undefined ? body.isActive : true,
         categories: body.categories || [],
-        brochurePdf: body.brochurePdf, // Explicitly include brochurePdf
+        brochurePdf: body.brochurePdf,
         updatedAt: Date.now(),
       };
 
@@ -71,9 +54,6 @@ async function handler(req, { params }) {
         );
       }
 
-      console.log('Course after update - brochurePdf:', course.brochurePdf);
-      console.log('Course after update - full course:', JSON.stringify(course.toObject(), null, 2));
-
       return NextResponse.json({
         success: true,
         course,
@@ -85,12 +65,6 @@ async function handler(req, { params }) {
           { success: false, msg: 'Course not found' },
           { status: 404 }
         );
-      }
-
-      // Delete the brochure PDF file if it exists
-      if (course.brochurePdf) {
-        console.log('Deleting brochure file for course:', course.brochurePdf);
-        await deleteBrochureFile(course.brochurePdf);
       }
 
       // Delete the course
