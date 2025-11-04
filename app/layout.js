@@ -15,6 +15,11 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Future Minds Institute - Admin Panel",
   description: "Admin panel for Future Minds Institute",
+  icons: {
+    icon: [{ url: "/logo.jpeg", type: "image/jpeg" }],
+    apple: [{ url: "/logo.jpeg", type: "image/jpeg" }],
+    shortcut: "/logo.jpeg",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -23,9 +28,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
