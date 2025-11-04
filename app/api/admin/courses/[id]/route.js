@@ -3,7 +3,7 @@ import connectDB from '../../../../../lib/db';
 import Course from '../../../../../models/Course';
 import Category from '../../../../../models/Category';
 import adminAuth from '../../../../../middleware/adminAuth';
-import { deleteBrochureFile } from '../../../../../lib/utils';
+import { deleteBrochureFile } from '../../../../../lib/serverUtils';
 
 async function handler(req, { params }) {
   try {
