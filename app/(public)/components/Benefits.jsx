@@ -6,32 +6,26 @@ const benefits = [
   {
     title: "Job-Ready Skills",
     desc: "Master the exact AI tools and methodologies that leading companies are implementing today.",
-    icon: "🎯",
   },
   {
     title: "Silicon Valley Expertise in India",
     desc: "Learn from industry veterans currently solving AI challenges at Google, Microsoft, Amazon, Meta, and top Indian unicorns.",
-    icon: "🌟",
   },
   {
     title: "Real-World Problem Solving",
     desc: "Experts share live case studies and methodologies they use daily to solve million-dollar business problems.",
-    icon: "📈",
   },
   {
     title: "Lifelong Network",
     desc: "Join a community of AI-forward professionals and continue learning beyond the classroom.",
-    icon: "🤝",
   },
   {
     title: "Portfolio Development",
     desc: "Build a comprehensive portfolio of AI projects that showcase your capabilities to employers.",
-    icon: "💼",
   },
   {
     title: "Continuous Updates",
     desc: "Stay current with the latest AI tools and trends through our alumni network and workshops.",
-    icon: "🔄",
   },
 ];
 
