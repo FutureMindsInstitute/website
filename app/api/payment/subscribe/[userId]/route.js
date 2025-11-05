@@ -3,6 +3,7 @@ import Razorpay from 'razorpay';
 import connectDB from '../../../../../lib/db';
 import User from '../../../../../models/User';
 import Course from '../../../../../models/Course';
+import Coupon from '../../../../../models/Coupon';
 import userAuth from '../../../../../middleware/userAuth';
 
 const razorpay = new Razorpay({
@@ -14,9 +15,9 @@ async function handler(req, { params }) {
   try {
     await connectDB();
 
-    const userId = params.userId;
+    const userId = (await params).userId;
     const body = await req.json();
-    const { courseId } = body;
+    const { courseId, couponName } = body;
 
     // Verify user matches token
     if (req.user._id.toString() !== userId) {
@@ -67,9 +68,43 @@ async function handler(req, { params }) {
       );
     }
 
+    // Calculate final amount with coupon discount if applicable
+    let finalPrice = course.discountPrice;
+    let appliedCoupon = null;
+
+    if (couponName) {
+      const coupon = await Coupon.findOne({ 
+        name: couponName,
+        isActive: true 
+      }).populate('courses');
+
+      if (coupon) {
+        // Check if coupon applies to this course
+        const appliesToCourse = coupon.courses.some(
+          (c) => c._id.toString() === courseId
+        );
+
+        // Check if coupon is not exhausted
+        const isAvailable = coupon.currentRedeemNumbers < coupon.totalRedeemNumbers;
+
+        if (appliesToCourse && isAvailable) {
+          appliedCoupon = coupon;
+          finalPrice = Math.max(0, course.discountPrice - coupon.amount);
+        }
+      }
+    }
+
+    // Calculate GST (18% on final price after coupon)
+    const gst = finalPrice * 0.18;
+    const totalWithGst = finalPrice + gst;
+
     // Create Razorpay order
-    const amount = course.discountPrice * 100; // Convert to paise
-    const receipt = `receipt_${userId}_${courseId}_${Date.now()}`;
+    const amount = Math.round(totalWithGst * 100); // Convert to paise
+    // Razorpay receipt must be <= 40 chars
+    const shortUser = String(userId).slice(-6);
+    const shortCourse = String(courseId).slice(-6);
+    const ts = Date.now().toString(36);
+    const receipt = `r_${shortUser}_${shortCourse}_${ts}`.slice(0, 40);
 
     const order = await razorpay.orders.create({
       amount,

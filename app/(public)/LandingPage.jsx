@@ -16,6 +16,7 @@ import Gallery from "./components/Gallery";
 import Stories from "./components/Stories";
 import LoginModal from "./components/modals/login";
 import SignupModal from "./components/modals/signup";
+import BillingModal from "./components/modals/Billing";
 
 const LandingPage = () => {
   return (
@@ -35,6 +36,7 @@ const LandingPage = () => {
       <Footer />
       <LoginModal />
       <SignupModal />
+      <BillingModal />
     </div>
   );
 };

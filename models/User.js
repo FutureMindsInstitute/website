@@ -52,6 +52,10 @@ const courseSubscriptionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  couponName: {
+    type: String,
+    default: null,
+  }
 }, { _id: false });
 
 const userSchema = new mongoose.Schema({

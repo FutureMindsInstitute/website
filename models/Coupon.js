@@ -6,10 +6,12 @@ export const couponSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Course",
         }],
-        required: true,
+        required: false,
+        default: [],
     },
     name: {
         type: String,
+        unique: true,
         required: true,
     },
     totalRedeemNumbers: {
@@ -18,7 +20,8 @@ export const couponSchema = new mongoose.Schema({
     },
     currentRedeemNumbers: {
         type: Number,
-        required: true
+        default: 0,
+        required: false
     },
     amount: {
         type: Number,
@@ -29,3 +32,7 @@ export const couponSchema = new mongoose.Schema({
         default: true
     },
 });
+
+const Coupon = mongoose.models.Coupon || mongoose.model('Coupon', couponSchema);
+
+export default Coupon;
