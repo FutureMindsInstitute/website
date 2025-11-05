@@ -4,6 +4,7 @@ import connectDB from '../../../../../lib/db';
 import User from '../../../../../models/User';
 import Course from '../../../../../models/Course';
 import userAuth from '../../../../../middleware/userAuth';
+import Coupon from '../../../../../models/Coupon';
 
 const RAZ_KEY_SECRET = process.env.RAZ_KEY_SECRET;
 
@@ -20,13 +21,14 @@ async function handler(req, { params }) {
   try {
     await connectDB();
 
-    const userId = params.userId;
+    const userId = (await params).userId;
     const body = await req.json();
     const {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
       courseId,
+      couponName,
     } = body;
 
     // Verify user matches token
@@ -92,6 +94,29 @@ async function handler(req, { params }) {
       );
     }
 
+    if (couponName) {
+      const coupon = await Coupon.findOne({ 
+        name: couponName,
+        isActive: true
+      }).populate('courses');
+
+      if (coupon) {
+        // Verify coupon applies to this course
+        const appliesToCourse = coupon.courses.some(
+          (c) => c._id.toString() === courseId
+        );
+
+        // Verify coupon is not exhausted
+        const isAvailable = coupon.currentRedeemNumbers < coupon.totalRedeemNumbers;
+
+        if (appliesToCourse && isAvailable) {
+          // Increment coupon redemption count
+          coupon.currentRedeemNumbers += 1;
+          await coupon.save();
+        }
+      }
+    }
+
     // Calculate dates
     const startDate = new Date();
     const endDate = new Date(startDate);
@@ -109,6 +134,7 @@ async function handler(req, { params }) {
       endDate,
       razorpay_order_id,
       razorpay_payment_id,
+      couponName,
     });
 
     await user.save();

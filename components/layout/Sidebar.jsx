@@ -10,6 +10,7 @@ import {
   FolderIcon, 
   UsersIcon,
   CogIcon,
+  TagIcon,
   ArrowRightOnRectangleIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
@@ -18,6 +19,7 @@ const navigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: HomeIcon },
   { name: 'Courses', href: '/admin/courses', icon: BookOpenIcon },
   { name: 'Categories', href: '/admin/categories', icon: FolderIcon },
+  { name: 'Coupons', href: '/admin/coupons', icon: TagIcon },
   // { name: 'Users', href: '/users', icon: UsersIcon },
   // { name: 'Settings', href: '/settings', icon: CogIcon },
 ];

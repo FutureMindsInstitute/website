@@ -67,25 +67,25 @@ const Dashboard = () => {
       .filter(Boolean);
   }, [user, allCourses]);
 
-  if (loading) {
-    return (
-      <section className="py-16 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 text-slate-300">
-          Loading your dashboard...
-        </div>
-      </section>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <section className="h-screen flex items-center justify-center py-16 bg-slate-900">
+  //       <div className="mx-auto px-6 sm:px-8 lg:px-10 text-slate-300">
+  //         Loading your dashboard...
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
-  if (error) {
-    return (
-      <section className="py-16 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 text-red-400">
-          {error}
-        </div>
-      </section>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <section className="py-16 bg-slate-900">
+  //       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 text-red-400">
+  //         {error}
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
   const duration = (startDate, endDate) => {
     if (!endDate) return "Lifetime access";
@@ -102,7 +102,17 @@ const Dashboard = () => {
   };
 
   return (
-    <section className="h-screen py-16 bg-slate-900">
+    <section className="py-16 bg-slate-900">
+      {loading && (
+        <div className="h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+        </div>
+      )}
+      {error && (
+        <div className="h-screen flex items-center justify-center">
+          <div className="text-slate-300">{error}</div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
         <button
             onClick={logout}

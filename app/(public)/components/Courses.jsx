@@ -77,7 +77,7 @@ const Courses = () => {
 
   function CourseCard({ course, useForm, formUrl }) {
     const {user} = useUserAuth();
-    const { openLogin } = useUserModal();
+    const { openLogin, openBilling } = useUserModal();
 
     const { initiatePayment, loading, isDisabled } = usePaymentGateway({
       courseId: course._id,
@@ -96,7 +96,7 @@ const Courses = () => {
         window.open(formUrl, "_blank", "noopener,noreferrer");
         return;
       }
-      initiatePayment();
+      openBilling(course);
     }
 
 
@@ -224,9 +224,14 @@ const Courses = () => {
 
                 <div className="flex flex-wrap justify-center gap-10 mx-auto">
                   {catCourses.map((course, idx) => {
-                    const useForm = idx >= catCourses.length - 2;
+                    // const useForm = idx >= catCourses.length - 2;
                     return (
-                      <CourseCard key={course._id} course={course} useForm={useForm} formUrl={formUrl} />
+                      <CourseCard 
+                        key={course._id} 
+                        course={course} 
+                        //useForm={useForm} 
+                        //formUrl={formUrl} 
+                      />
                     )
                   })}
                 </div>

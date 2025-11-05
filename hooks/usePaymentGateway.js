@@ -9,16 +9,17 @@ import { useUserModal } from "./useUserModal";
 
 export default function usePaymentGateway({ courseId, courseName, onPaymentSuccess, onPaymentError }) {
   const [loading, setLoading] = useState(false);
-  const { user } = useUserAuth();
+  const { user, refreshUserData } = useUserAuth();
   const router = useRouter();
   const { openLogin } = useUserModal();
 
-  const initiatePayment = async () => {
+  const initiatePayment = async (couponName = null) => {
     if (!user) return openLogin();
     if (!courseId) return toast.error("Course ID is required");
     setLoading(true);
     try {
-      const resp = await publicApi.post(`/payment/subscribe/${user._id}`, { courseId }, { withCredentials: true });
+      const resp = await publicApi.post(`/api/payment/subscribe/${user._id}`, { courseId, couponName }, { withCredentials: true });
+      console.log("response", resp);
       const { order, prefill } = resp.data.data;
       const options = {
         key: process.env.NEXT_PUBLIC_RAZ_KEY_ID,
@@ -29,14 +30,18 @@ export default function usePaymentGateway({ courseId, courseName, onPaymentSucce
         order_id: order.id,
         handler: async (rz) => {
           try {
-            await publicApi.post(`/payment/verify-payment/${user._id}`, {
+            await publicApi.post(`/api/payment/verify-payment/${user._id}`, {
               razorpay_order_id: rz.razorpay_order_id,
               razorpay_payment_id: rz.razorpay_payment_id,
               razorpay_signature: rz.razorpay_signature,
               courseId,
+              couponName,
             }, { withCredentials: true });
             toast.success("Payment successful!");
-            onPaymentSuccess ? onPaymentSuccess(rz) : router.push("/dashboard", { replace: true });
+            try { await refreshUserData?.(); } catch (_) {}
+            router.replace("/dashboard");
+            try { router.refresh?.(); } catch (_) {}
+            onPaymentSuccess && onPaymentSuccess(rz);
           } catch (e) {
             toast.error("Payment verification failed");
             onPaymentError && onPaymentError(e);
@@ -49,16 +54,22 @@ export default function usePaymentGateway({ courseId, courseName, onPaymentSucce
       if (!window.Razorpay) {
         const s = document.createElement("script");
         s.src = "https://checkout.razorpay.com/v1/checkout.js";
-        s.onload = () => new window.Razorpay(options).open();
-        document.body.appendChild(s);
-      } else {
-        new window.Razorpay(options).open();
+        await new Promise((resolve, reject) => {
+          s.onload = resolve;
+          s.onerror = reject;
+          document.body.appendChild(s);
+        });
       }
+      const rz = new window.Razorpay(options);
+      rz.open();
+      return true;
     } catch (e) {
       toast.error("Failed to create payment order");
       onPaymentError && onPaymentError(e);
-    } finally {
       setLoading(false);
+      return false;
+    } finally {
+      // loading will be handled by Razorpay modal ondismiss or catch path
     }
   };
 
