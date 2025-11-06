@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import publicApi from '../../../../lib/publicApi';
 
 const initialForm = {
@@ -22,6 +22,8 @@ export default function CouponsPage() {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(initialForm);
   const [submitting, setSubmitting] = useState(false);
+  const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     let mounted = true;
@@ -46,6 +48,25 @@ export default function CouponsPage() {
     load();
     return () => { mounted = false; };
   }, []);
+
+  // Close courses dropdown on outside click / Escape
+  useEffect(() => {
+    const onClick = (e) => {
+      if (!courseDropdownOpen) return;
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setCourseDropdownOpen(false);
+      }
+    };
+    const onKey = (e) => {
+      if (e.key === 'Escape') setCourseDropdownOpen(false);
+    };
+    document.addEventListener('mousedown', onClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [courseDropdownOpen]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -229,17 +250,65 @@ export default function CouponsPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Courses</label>
-                <select
-                  multiple
-                  value={form.courses}
-                  onChange={onChangeCourses}
-                  className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 min-h-[120px]"
-                >
-                  {courses.map((c) => (
-                    <option key={c._id} value={String(c._id)}>{c.name}</option>
-                  ))}
-                </select>
-                <p className="mt-1 text-xs text-gray-500">Hold Ctrl/Cmd to select multiple</p>
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => setCourseDropdownOpen(o => !o)}
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 flex items-center justify-between hover:bg-gray-50 cursor-pointer"
+                  >
+                    <span>{form.courses.length ? `Selected (${form.courses.length})` : 'Select courses'}</span>
+                    <svg className={`w-4 h-4 transition-transform ${courseDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {courseDropdownOpen && (
+                    <div className="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-md shadow-lg p-2">
+                      <div className="max-h-64 overflow-auto">
+                        {courses.length === 0 ? (
+                          <div className="px-2 py-2 text-sm text-gray-500">No courses</div>
+                        ) : (
+                          courses.map((c) => {
+                            const id = String(c._id);
+                            const checked = form.courses.includes(id);
+                            return (
+                              <label key={id} className="flex items-center gap-2 px-2 py-1 text-sm text-gray-800 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={(e) => {
+                                    setForm(s => {
+                                      const next = e.target.checked
+                                        ? Array.from(new Set([...(s.courses || []), id]))
+                                        : (s.courses || []).filter(x => x !== id);
+                                      return { ...s, courses: next };
+                                    });
+                                  }}
+                                />
+                                <span className="truncate">{c.name}</span>
+                              </label>
+                            );
+                          })
+                        )}
+                      </div>
+                      <div className="mt-2 flex items-center justify-between">
+                        <button
+                          type="button"
+                          onClick={() => setForm(s => ({ ...s, courses: [] }))}
+                          className="px-2 py-1 text-xs rounded-md bg-gray-100 hover:bg-gray-200 text-gray-800 cursor-pointer"
+                        >
+                          Clear
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setCourseDropdownOpen(false)}
+                          className="px-2 py-1 text-xs rounded-md bg-emerald-500 hover:bg-emerald-600 text-white cursor-pointer"
+                        >
+                          Done
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '../../../../../lib/db';
 import Course from '../../../../../models/Course';
 import Category from '../../../../../models/Category';
+import Coupon from '../../../../../models/Coupon';
 import adminAuth from '../../../../../middleware/adminAuth';
 import { deleteBrochureFile } from '../../../../../lib/serverUtils';
 
@@ -93,7 +94,13 @@ async function handler(req, { params }) {
         await deleteBrochureFile(course.brochurePdf);
       }
 
-      // Delete the course
+
+      await Coupon.updateMany(
+        { courses: course._id },
+        { $pull: { courses: course._id } }
+      );
+      console.log('Removed course reference from coupons');
+
       await Course.findByIdAndDelete(id);
 
       return NextResponse.json({

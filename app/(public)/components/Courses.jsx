@@ -109,8 +109,9 @@ const Courses = () => {
           <div className="mb-4 mt-2">
             <div className="text-xl text-slate-400 line-through">₹{course.price}</div>
             <div className="text-2xl font-bold text-emerald-400">
-              ₹{course.discountPrice} <span className="text-xs text-slate-400">({course.earlyBirdTitle})</span>
+              ₹{course.discountPrice} <span className="text-sm text-slate-400">({course.earlyBirdTitle})</span>
             </div>
+            <span className="text-xs text-slate-400">18% GST Applied</span>
           </div>
           <p className="text-slate-300 text-sm leading-relaxed">{course.description}</p>
           <div className="text-sm font-medium mt-4 mb-4 text-emerald-300">⏳ {course.duration}</div>
