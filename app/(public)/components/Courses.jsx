@@ -8,66 +8,6 @@ import { useUserAuth } from "../../../hooks/useUserAuth";
 import { useUserModal } from "../../../hooks/useUserModal";
 
 const Courses = () => {
-  // const courses = [
-  //   {
-  //     id: "beginner-ai-foundations",
-  //     title: "🚀 Beginner Level: AI Foundations",
-  //     value: "❌ ₹6,999",
-  //     earlyBird: "✅ ₹4,999",
-  //     earlybirdtitle: "Early Bird-Only 20 Seats left!!",
-  //     price: 4999,
-  //     description:
-  //       "From Zero to AI Hero in Record Time. Perfect for students with no prior AI experience.",
-  //     duration: "8-10 hours (Flexible weekend/weekday schedule)",
-  //     features: [
-  //       "Introduction to AI and Machine Learning concepts",
-  //       "Learn 10+ AI tools",
-  //       "Prompt engineering fundamentals",
-  //       "Basic automation with AI assistants",
-  //       "AI ethics and responsible usage",
-  //       "Creating your first AI-powered project",
-  //     ],
-  //   },
-  //   {
-  //     id: "intermediate-ai-implementation",
-  //     title: "⚡ Intermediate Level: AI Implementation",
-  //     value: "❌ ₹9,999",
-  //     earlyBird: "✅ ₹7,499",
-  //     earlybirdtitle: "Limited Seats!",
-  //     price: 7499,
-  //     description:
-  //       "Master AI Tools That Industry Leaders Use Daily. Perfect for students with basic AI knowledge or who have completed the Beginner Level.",
-  //     duration: "8-10 hours (Flexible weekend/weekday schedule)",
-  //     features: [
-  //       "Advanced prompt engineering and chain-of-thought techniques",
-  //       "AI workflow automation",
-  //       "Data analysis with AI tools",
-  //       "AI-powered content creation and marketing",
-  //       "No-code AI app development",
-  //       "Building AI-enhanced business solutions",
-  //     ],
-  //   },
-  //   {
-  //     id: "advanced-ai-innovation",
-  //     title: "🎯 Advanced Level: AI Innovation, Strategy, and Capstone Project",
-  //     value: "❌ ₹24,999",
-  //     earlyBird: "✅ ₹19,999",
-  //     earlybirdtitle: "Early Bird -10 Seats Left!",
-  //     price: 19999,
-  //     description:
-  //       "Build Real-World AI Solutions Like Silicon Valley Pros. Perfect for students ready to lead AI initiatives or who have completed the Intermediate Level.",
-  //     duration: "8-10 hours (Flexible weekend/weekday schedule)",
-  //     features: [
-  //       "Real-World Capstone Project: Develop a complete AI solution for an actual business problem",
-  //       "Custom AI model fine-tuning and integration",
-  //       "End-to-end AI product development",
-  //       "AI strategy and implementation roadmaps",
-  //       "Industry-specific AI applications",
-  //       "Portfolio-ready projects that impress employers",
-  //     ],
-  //   },
-  // ];
-
   const [courses, setCourses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -128,7 +68,6 @@ const Courses = () => {
           {course.brochurePdf && (
             <a
               href={course.brochurePdf}
-              target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 bg-slate-700 text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-600 transition duration-300 shadow-md hover:shadow-slate-400/20 cursor-pointer"
             >
@@ -222,7 +161,7 @@ const Courses = () => {
                   <p className="text-slate-300 mt-2 text-center text-lg max-w-3xl mx-auto text-bold">{category.description}</p>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-10 mx-auto">
+                <div className="flex flex-wrap items-start justify-center gap-10 mx-auto">
                   {catCourses.map((course, idx) => {
                     // const useForm = idx >= catCourses.length - 2;
                     return (
