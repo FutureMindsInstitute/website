@@ -20,7 +20,7 @@ const navigation = [
   { name: 'Courses', href: '/admin/courses', icon: BookOpenIcon },
   { name: 'Categories', href: '/admin/categories', icon: FolderIcon },
   { name: 'Coupons', href: '/admin/coupons', icon: TagIcon },
-  // { name: 'Users', href: '/users', icon: UsersIcon },
+  { name: 'Users', href: '/admin/users', icon: UsersIcon },
   // { name: 'Settings', href: '/settings', icon: CogIcon },
 ];
 
