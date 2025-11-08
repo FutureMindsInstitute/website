@@ -52,10 +52,6 @@ async function handler(req) {
         categoriesArray = categories.split(',').map(c => c.trim()).filter(c => c.length > 0);
       }
 
-      // Handle brochurePdf - ensure empty strings are converted to null
-      const brochurePath = brochurePdf && brochurePdf.trim() !== '' ? brochurePdf.trim() : null;
-      console.log('Brochure PDF path to save:', brochurePath);
-
       const course = await Course.create({
         name,
         description,
@@ -67,7 +63,7 @@ async function handler(req) {
         earlyBirdTitle,
         isActive: isActive !== undefined ? isActive : true,
         categories: categoriesArray,
-        brochurePdf: brochurePath,
+        brochurePdf: brochurePdf && brochurePdf.trim() !== '' ? brochurePdf.trim() : null,
       });
 
       await course.populate('categories');

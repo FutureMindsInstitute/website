@@ -26,9 +26,7 @@ const CourseForm = ({ isOpen, onClose, course = null, onSuccess }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [features, setFeatures] = useState(['']);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadingFile, setUploadingFile] = useState(false);
-  const [brochurePath, setBrochurePath] = useState(null);
+  const [brochureUrl, setBrochureUrl] = useState('');
   
   const {
     register,
@@ -69,13 +67,11 @@ const CourseForm = ({ isOpen, onClose, course = null, onSuccess }) => {
           ) : []
         };
         setFeatures(courseFeatures.length > 0 ? courseFeatures : ['']);
-        setBrochurePath(course.brochurePdf || null);
-        setSelectedFile(null);
+        setBrochureUrl(course.brochurePdf || '');
         reset(courseForForm);
       } else {
         setFeatures(['']);
-        setBrochurePath(null);
-        setSelectedFile(null);
+        setBrochureUrl('');
         reset({
           name: '',
           description: '',
@@ -125,66 +121,16 @@ const CourseForm = ({ isOpen, onClose, course = null, onSuccess }) => {
     setValue('features', newFeatures);
   };
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Validate file type
-    if (file.type !== 'application/pdf') {
-      alert('Please select a PDF file');
-      e.target.value = '';
-      return;
-    }
-
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      alert('File size must be less than 10MB');
-      e.target.value = '';
-      return;
-    }
-
-    setSelectedFile(file);
-    setUploadingFile(true);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const path = await apiClient.uploadBrochure(formData);
-      console.log('Brochure uploaded:', path);
-      setBrochurePath(path);
-      setSelectedFile(null);
-    } catch (error) {
-      console.error('Error uploading brochure:', error);
-      alert('Failed to upload brochure. Please try again.');
-      setSelectedFile(null);
-      e.target.value = '';
-    } finally {
-      setUploadingFile(false);
-    }
-  };
-
-  const handleRemoveBrochure = () => {
-    setBrochurePath(null);
-    setSelectedFile(null);
-  };
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      // Ensure brochurePdf is properly set - handle empty strings
-      const brochurePdfValue = brochurePath && brochurePath.trim() !== '' ? brochurePath.trim() : null;
-      console.log('Brochure path before submission:', brochurePath);
-      console.log('Brochure PDF value to send:', brochurePdfValue);
-      
       const courseData = {
         ...data,
         features: data.features.filter(f => f && f.trim().length > 0),
         categories: Array.isArray(data.categories) ? data.categories : [],
-        brochurePdf: brochurePdfValue,
+        brochurePdf: brochureUrl && brochureUrl.trim() !== '' ? brochureUrl.trim() : null,
       };
-      
-      console.log('Submitting course data:', courseData);
       
       if (course) {
         await apiClient.updateCourse(course._id, courseData);
@@ -291,50 +237,14 @@ const CourseForm = ({ isOpen, onClose, course = null, onSuccess }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-800 mb-2">
-            Course Brochure (PDF)
-          </label>
-          <div className="space-y-2">
-            {brochurePath ? (
-              <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-md">
-                <div className="flex items-center space-x-2">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  <span className="text-sm text-green-800">Brochure uploaded</span>
-                  <a 
-                    href={brochurePath} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:text-blue-800 underline"
-                  >
-                    View PDF
-                  </a>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleRemoveBrochure}
-                  className="text-sm text-red-600 hover:text-red-800"
-                >
-                  Remove
-                </button>
-              </div>
-            ) : (
-              <div>
-                <input
-                  type="file"
-                  accept=".pdf,application/pdf"
-                  onChange={handleFileChange}
-                  disabled={uploadingFile}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-                {uploadingFile && (
-                  <p className="text-sm text-gray-500 mt-1">Uploading...</p>
-                )}
-                <p className="text-xs text-gray-500 mt-1">Maximum file size: 10MB</p>
-              </div>
-            )}
-          </div>
+          <Input
+            label="Brochure URL (Google Drive Link)"
+            placeholder="https://drive.google.com/..."
+            value={brochureUrl}
+            onChange={(e) => setBrochureUrl(e.target.value)}
+            type="url"
+          />
+          <p className="text-xs text-gray-500 mt-1">Enter the Google Drive shareable link for the course brochure</p>
         </div>
 
         <div>
