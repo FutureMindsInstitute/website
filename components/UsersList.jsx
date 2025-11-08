@@ -216,24 +216,24 @@ export default function UsersList({ initialCourseFilter = [], courseOptions: cou
       </CardHeader>
       <CardContent>
         <div className="mb-4 grid grid-cols-1 lg:grid-cols-3 gap-3">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <input
               value={localQuery}
               onChange={(e) => setLocalQuery(e.target.value)}
               placeholder="Filter current page (name/email)"
               className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
             />
-          </div>
+          </div> */}
 
           <div className="flex items-center gap-2">
             <input
               defaultValue={serverQuery}
               onChange={(e) => triggerServerSearch(e.target.value)}
-              placeholder="Search across all users"
+              placeholder="Search"
               className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
             />
             <Button onClick={() => triggerServerSearch(document.activeElement?.value || serverQuery)}>
-              Search across all
+              Search
             </Button>
           </div>
 
