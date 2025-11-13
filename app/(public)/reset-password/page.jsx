@@ -2,9 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import publicApi from '../../../../lib/publicApi';
-import { useUserAuth } from '../../../../hooks/useUserAuth';
-import { useUserModal } from '../../../../hooks/useUserModal';
+import publicApi from '../../../lib/publicApi';
+import { useUserAuth } from '../../../hooks/useUserAuth';
+import { useUserModal } from '../../../hooks/useUserModal';
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
