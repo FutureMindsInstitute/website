@@ -89,12 +89,6 @@ const CourseDetail = ({ courseId }) => {
         <Navbar />
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-20">
           <div className="text-center text-red-400">{error || 'Course not found'}</div>
-          <button
-            onClick={() => router.push('/')}
-            className="mt-4 bg-emerald-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-emerald-600 transition duration-300"
-          >
-            Back to Home
-          </button>
         </div>
         <Footer />
       </div>
