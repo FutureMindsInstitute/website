@@ -99,16 +99,6 @@ const CourseDetail = ({ courseId }) => {
     <div className="min-h-screen bg-primary-dark">
       <Navbar />
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-12">
-        {/* Back Button */}
-        <button
-          onClick={() => router.push('/#courses')}
-          className="mb-8 flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Courses
-        </button>
 
         {/* Course Header */}
         <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 md:p-12 mb-8">
