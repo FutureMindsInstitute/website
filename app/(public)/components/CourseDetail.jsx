@@ -98,7 +98,7 @@ const CourseDetail = ({ courseId }) => {
   return (
     <div className="min-h-screen bg-primary-dark">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-12">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 lg:py-24 py-18">
 
         {/* Course Header */}
         <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 md:p-12 mb-8">
