@@ -4,18 +4,35 @@ import React, { useState } from 'react';
 //import logo from '../../../public/assets/agentx_logo_edited_0.jpeg';
 import { useUserModal } from '../../../hooks/useUserModal';
 import { useUserAuth } from '../../../hooks/useUserAuth';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openLogin } = useUserModal();
   const { isAuthenticated } = useUserAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    // Check if we're on the home page
+    if (pathname === '/' || pathname === '') {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        setIsMenuOpen(false);
+      }
+    } else {
+      // Navigate to home page with hash, then scroll
+      router.push(`/#${sectionId}`);
       setIsMenuOpen(false);
+    }
+  };
+
+  const handleLogoClick = () => {
+    if (pathname === '/' || pathname === '') {
+      scrollToSection('hero');
+    } else {
+      router.push('/');
     }
   };
 
@@ -32,14 +49,14 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
-            <img onClick={()=>scrollToSection("hero")}
+            <img onClick={handleLogoClick}
               src="/assets/agentx_logo_edited_0.jpeg"
               alt="Future Minds Institute Logo" 
-              className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg object-fill"
+              className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg object-fill cursor-pointer"
             />
             <div className="text-white">
               <p className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold leading-tight">Future Minds Institute</p>
-              <p className="text-xs sm:text-xs md:text-sm text-center text-slate-400 leading-tight">Transforming Education</p>
+              <p className="text-xs sm:text-xs md:text-sm text-left text-slate-400 leading-tight">Transforming Education</p>
             </div>
           </div>
 

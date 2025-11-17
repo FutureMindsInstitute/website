@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import publicApi from "../../../lib/publicApi";
 // import PaymentGateway from "./paymentGateway";
 import usePaymentGateway from "../../../hooks/usePaymentGateway";
@@ -16,6 +17,7 @@ const Courses = () => {
   const formUrl = "https://forms.gle/r1YpmDKVj7U3AdJ3A";
 
   function CourseCard({ course, useForm, formUrl }) {
+    const router = useRouter();
     const {user} = useUserAuth();
     const { openLogin, openBilling } = useUserModal();
 
@@ -39,13 +41,22 @@ const Courses = () => {
       openBilling(course);
     }
 
+    const handleViewDetails = (e) => {
+      e.stopPropagation();
+      router.push(`/course/${course._id}`);
+    };
 
     const disabled = isEnrolled || (!useForm && isDisabled);
   
     return (
       <div className="w-full text-center sm:w-[22rem] md:w-[22rem] relative bg-slate-800/60 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
         <div>
-          <h3 className="text-2xl font-semibold text-white mb-4">{course.name}</h3>
+          <h3 
+            className="text-2xl font-semibold text-white mb-4 cursor-pointer hover:text-emerald-400 transition-colors"
+            onClick={handleViewDetails}
+          >
+            {course.name}
+          </h3>
           <div className="mb-4 mt-2">
             <div className="text-xl text-slate-400 line-through">₹{course.price}</div>
             <div className="text-2xl font-bold text-emerald-400">
@@ -65,10 +76,22 @@ const Courses = () => {
           </ul>
         </div>
   
-        <div className="space-y-3">
+        <div className="space-y-3 pt-5">
+          <button
+            onClick={handleViewDetails}
+            className="w-full flex items-center justify-center gap-2 bg-slate-700 text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-600 transition duration-300 shadow-md hover:shadow-slate-400/20 cursor-pointer"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            View Details
+          </button>
+          
           {course.brochurePdf && (
             <a
               href={course.brochurePdf}
+              target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 bg-slate-700 text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-600 transition duration-300 shadow-md hover:shadow-slate-400/20 cursor-pointer"
             >

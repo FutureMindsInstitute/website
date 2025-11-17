@@ -3,12 +3,22 @@
 import React from "react";
 //import logo from '../../../public/assets/agentx_logo_edited_0.jpeg';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 
 const Footer = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    // Check if we're on the home page
+    if (pathname === '/' || pathname === '') {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // Navigate to home page with hash, then scroll
+      router.push(`/#${sectionId}`);
     }
   };
 
