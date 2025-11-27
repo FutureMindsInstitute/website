@@ -10,7 +10,7 @@ import Bonuses from "./components/Bonuses";
 import Educators from "./components/Educators";
 import CallToAction from "./components/CallToAction";
 import Footer from "./components/Footer";
-import CoursesWrapper from "./components/CoursesWrapper";
+import Courses from "./components/Courses";
 import BenefitsSection from "./components/Benefits";
 import Gallery from "./components/Gallery";
 import Stories from "./components/Stories";
@@ -26,7 +26,7 @@ const LandingPage = () => {
       <About />
       {/* <Agenda /> */}
       {/* <EventDetails /> */}
-      <CoursesWrapper />
+      <Courses />
       <BenefitsSection />
       {/* <Bonuses /> */}
       <Stories />
