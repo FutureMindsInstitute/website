@@ -1,12 +1,25 @@
 import { cache } from 'react';
 import connectDB from '../../../lib/db';
-import Course from '../../../models/Course';
-import Category from '../../../models/Category';
+import mongoose from 'mongoose';
 import Courses from './Courses';
 
 // Cache the database connection and queries
 const getCoursesData = cache(async () => {
+  // Connect to database first - this ensures mongoose is ready
   await connectDB();
+  
+  // Ensure models are registered by importing them
+  // Import at runtime to ensure mongoose connection is established
+  const CourseModule = await import('../../../models/Course');
+  const CategoryModule = await import('../../../models/Category');
+  
+  const Course = CourseModule.default;
+  const Category = CategoryModule.default;
+  
+  // Double-check models are available
+  if (!Course || !Category) {
+    throw new Error('Models not properly initialized');
+  }
   
   // Fetch courses and categories in parallel
   const [courses, categories] = await Promise.all([
