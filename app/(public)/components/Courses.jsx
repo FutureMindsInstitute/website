@@ -8,10 +8,10 @@ import usePaymentGateway from "../../../hooks/usePaymentGateway";
 import { useUserAuth } from "../../../hooks/useUserAuth";
 import { useUserModal } from "../../../hooks/useUserModal";
 
-const Courses = () => {
-  const [courses, setCourses] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Courses = ({ initialCourses = null, initialCategories = null }) => {
+  const [courses, setCourses] = useState(initialCourses || []);
+  const [categories, setCategories] = useState(initialCategories || []);
+  const [loading, setLoading] = useState(initialCourses === null);
   const [error, setError] = useState(null);
 
   const formUrl = "https://forms.gle/r1YpmDKVj7U3AdJ3A";
@@ -115,6 +115,11 @@ const Courses = () => {
   }
 
   useEffect(() => {
+    // Skip API calls if data is already provided via props
+    if (initialCourses !== null && initialCategories !== null) {
+      return;
+    }
+
     let mounted = true;
     (async () => {
       try {
@@ -134,7 +139,7 @@ const Courses = () => {
       }
     })();
     return () => { mounted = false; };
-  }, []);
+  }, [initialCourses, initialCategories]);
 
   const coursesForCategory = (categoryId) => {
     return courses.filter(c => {
