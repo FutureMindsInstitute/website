@@ -15,6 +15,7 @@ const categorySchema = new mongoose.Schema({
   },
 });
 
-const Category = mongoose.models.Category || mongoose.model('Category', categorySchema);
+// Ensure mongoose.models exists before accessing it
+const Category = (mongoose.models && mongoose.models.Category) || mongoose.model('Category', categorySchema);
 
 export default Category;

@@ -1,42 +1,45 @@
 import { cache } from 'react';
-import connectDB from '../../../lib/db';
-import mongoose from 'mongoose';
 import Courses from './Courses';
 
-// Cache the database connection and queries
+// Cache the API calls - using internal API routes for better compatibility
 const getCoursesData = cache(async () => {
-  // Connect to database first - this ensures mongoose is ready
-  await connectDB();
-  
-  // Ensure models are registered by importing them
-  // Import at runtime to ensure mongoose connection is established
-  const CourseModule = await import('../../../models/Course');
-  const CategoryModule = await import('../../../models/Category');
-  
-  const Course = CourseModule.default;
-  const Category = CategoryModule.default;
-  
-  // Double-check models are available
-  if (!Course || !Category) {
-    throw new Error('Models not properly initialized');
+  try {
+    // In server components, we can use the API routes directly
+    // For production, use the full URL; for local, use localhost
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 
+                   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+    
+    // Fetch from our optimized API routes
+    const [coursesRes, categoriesRes] = await Promise.all([
+      fetch(`${baseUrl}/api/course`, {
+        next: { revalidate: 60 }, // Cache for 60 seconds
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }),
+      fetch(`${baseUrl}/api/category`, {
+        next: { revalidate: 60 }, // Cache for 60 seconds
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+    ]);
+
+    if (!coursesRes.ok || !categoriesRes.ok) {
+      throw new Error(`Failed to fetch data: ${coursesRes.status} ${categoriesRes.status}`);
+    }
+
+    const coursesData = await coursesRes.json();
+    const categoriesData = await categoriesRes.json();
+
+    return {
+      courses: coursesData.success ? coursesData.courses : [],
+      categories: categoriesData.success ? categoriesData.categories : []
+    };
+  } catch (error) {
+    console.error('Error in getCoursesData:', error);
+    throw error;
   }
-  
-  // Fetch courses and categories in parallel
-  const [courses, categories] = await Promise.all([
-    Course.find({ isActive: true })
-      .select('name description duration courseTotalDuration features price discountPrice earlyBirdTitle isActive categories brochurePdf')
-      .populate('categories', 'name description')
-      .lean(),
-    Category.find()
-      .select('name description')
-      .lean()
-  ]);
-
-  // Convert MongoDB documents to JSON-serializable format
-  const coursesData = JSON.parse(JSON.stringify(courses));
-  const categoriesData = JSON.parse(JSON.stringify(categories));
-
-  return { courses: coursesData, categories: categoriesData };
 });
 
 export default async function CoursesWrapper() {
@@ -44,11 +47,11 @@ export default async function CoursesWrapper() {
     const { courses, categories } = await getCoursesData();
     
     // Filter only active courses (in case any slipped through)
-    const activeCourses = courses.filter(c => c.isActive);
+    const activeCourses = Array.isArray(courses) ? courses.filter(c => c.isActive) : [];
     
-    return <Courses initialCourses={activeCourses} initialCategories={categories} />;
+    return <Courses initialCourses={activeCourses} initialCategories={categories || []} />;
   } catch (error) {
-    console.error('Error fetching courses data:', error);
+    console.error('Error fetching courses data in wrapper:', error);
     // Fallback to client-side fetching if server-side fails
     return <Courses />;
   }

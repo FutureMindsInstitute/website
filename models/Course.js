@@ -61,6 +61,7 @@ courseSchema.pre('save', function(next) {
   next();
 });
 
-const Course = mongoose.models.Course || mongoose.model('Course', courseSchema);
+// Ensure mongoose.models exists before accessing it
+const Course = (mongoose.models && mongoose.models.Course) || mongoose.model('Course', courseSchema);
 
 export default Course;
