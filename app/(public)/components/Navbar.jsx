@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-//import logo from '../../../public/assets/agentx_logo_edited_0.jpeg';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useUserModal } from '../../../hooks/useUserModal';
 import { useUserAuth } from '../../../hooks/useUserAuth';
 import { useRouter, usePathname } from 'next/navigation';
@@ -12,17 +12,12 @@ const Navbar = () => {
   const { isAuthenticated } = useUserAuth();
   const router = useRouter();
   const pathname = usePathname();
-  
+
   const scrollToSection = (sectionId) => {
-    // Check if we're on the home page
     if (pathname === '/' || pathname === '') {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-        setIsMenuOpen(false);
-      }
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
     } else {
-      // Navigate to home page with hash, then scroll
       router.push(`/#${sectionId}`);
       setIsMenuOpen(false);
     }
@@ -37,189 +32,266 @@ const Navbar = () => {
   };
 
   const handleRegisterClick = () => {
-    if (isAuthenticated) {
-      console.log('User is authenticated, proceed with enrollment');
-    } else {
-      openLogin();
-    }
+    if (!isAuthenticated) openLogin();
+    else scrollToSection('courses');
+  };
+
+  const navLinks = [
+    { label: 'About',     section: 'about' },
+    { label: 'Courses',   section: 'courses' },
+    { label: 'Educators', section: 'educators' },
+    { label: 'Stories',   section: 'stories' },
+  ];
+
+  const handleMasterclasstClick = () => {
+    router.push('/ai-mastery');
+    setIsMenuOpen(false);
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
-          <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4" onClick={handleLogoClick}>
+    <motion.nav
+      className="fixed top-0 left-0 right-0 z-50"
+      style={{
+        background: '#0B0F1A',
+        borderBottom: '1px solid rgba(240,237,230,0.06)',
+      }}
+      initial={{ y: -80 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+    >
+      <div className="container-fm">
+        <div className="flex items-center justify-between" style={{ height: '72px' }}>
+
+          {/* Logo */}
+          <button
+            onClick={handleLogoClick}
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+          >
             <img
-              src="/assets/agentx_logo_edited_0.jpeg"
-              alt="Future Minds Institute Logo" 
-              className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg object-fill cursor-pointer"
+              src="/assets/logo-transparent.png"
+              alt="Future Minds Institute"
+              style={{
+                height: '64px',
+                width: 'auto',
+                display: 'block',
+                objectFit: 'contain',
+              }}
             />
-            <div className="text-white">
-              <p className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold leading-tight">Future Minds Institute</p>
-              <p className="text-xs sm:text-xs md:text-sm text-left text-slate-400 leading-tight">Transforming Education</p>
-            </div>
+          </button>
+
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <button
+                key={link.section}
+                onClick={() => scrollToSection(link.section)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 500,
+                  fontSize: '14px',
+                  color: '#6B6B6B',
+                  padding: '8px 14px',
+                  borderRadius: '8px',
+                  transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#F0EDE6')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#6B6B6B')}
+              >
+                {link.label}
+              </button>
+            ))}
+            <button
+              onClick={handleMasterclasstClick}
+              style={{
+                background: 'rgba(212,175,55,0.08)',
+                border: '1px solid rgba(212,175,55,0.25)',
+                cursor: 'pointer',
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 600,
+                fontSize: '13px',
+                color: '#D4AF37',
+                padding: '6px 14px',
+                borderRadius: '8px',
+                transition: 'background 0.2s ease, border-color 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(212,175,55,0.15)';
+                e.currentTarget.style.borderColor = 'rgba(212,175,55,0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(212,175,55,0.08)';
+                e.currentTarget.style.borderColor = 'rgba(212,175,55,0.25)';
+              }}
+            >
+              Masterclass
+            </button>
           </div>
 
-          {/* Clean Desktop Navigation - Better responsive breakpoints */}
-          <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
-            <button 
-              onClick={() => scrollToSection('about')}
-              className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-sm xl:text-base"
-            >
-              About
-            </button>
-            <button 
-              onClick={() => scrollToSection('courses')}
-              className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-sm xl:text-base"
-            >
-              Courses
-            </button>
-            <button 
-              onClick={() => scrollToSection('gallery')}
-              className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-sm xl:text-base"
-            >
-              Gallery
-            </button>
-            <button 
-              onClick={() => scrollToSection('educators')}
-              className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-sm xl:text-base"
-            >
-              Educators
-            </button>
+          {/* CTA + Hamburger */}
+          <div className="flex items-center gap-3">
             {isAuthenticated ? (
-              <div className="flex items-center space-x-4" onClick={()=>router.push('/dashboard')}>
-                <span className="text-slate-300 text-sm hover:text-white transition-colors duration-200 font-medium cursor-pointer">
-                  Dashboard
-                </span>
-                {/* <button 
-                  onClick={logout}
-                  className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-sm xl:text-base"
-                >
-                  Logout
-                </button> */}
-              </div>
-            ) : (
-              <button 
-                onClick={handleRegisterClick}
-                className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 xl:px-6 py-2 rounded-lg font-semibold transition-all duration-200 cursor-pointer text-sm xl:text-base"
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="hidden md:flex btn-secondary"
+                style={{ padding: '8px 20px', fontSize: '14px' }}
               >
-                Register Now
+                Dashboard
+              </button>
+            ) : (
+              <button
+                onClick={handleRegisterClick}
+                className="hidden md:flex"
+                style={{
+                  padding: '9px 22px',
+                  fontSize: '14px',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 700,
+                  background: '#D4AF37',
+                  color: '#0B0F1A',
+                  border: 'none',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                }}
+              >
+                Get Started
               </button>
             )}
-          </div>
 
-          {/* Tablet Navigation - Show on md screens, include all sections */}
-          <div className="hidden md:flex lg:hidden items-center space-x-3">
-            <button 
-              onClick={() => scrollToSection('about')}
-              className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-xs"
-            >
-              About
-            </button>
-            <button 
-              onClick={() => scrollToSection('courses')}
-              className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-xs"
-            >
-              Courses
-            </button>
-            <button 
-              onClick={() => scrollToSection('gallery')}
-              className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-xs"
-            >
-              Gallery
-            </button>
-            <button 
-              onClick={() => scrollToSection('educators')}
-              className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-xs"
-            >
-              Educators
-            </button>
-            {isAuthenticated ? (
-              <div className="flex items-center space-x-2">
-                <span className="text-slate-300 text-xs" onClick={()=>router.push('/dashboard')}>Dashboard</span>
-                {/* <button 
-                  onClick={logout}
-                  className="text-slate-400 hover:text-white transition-colors duration-200 font-medium cursor-pointer text-xs"
-                >
-                  Logout
-                </button> */}
-              </div>
-            ) : (
-              <button 
-                onClick={handleRegisterClick}
-                className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-2 rounded-lg font-semibold transition-all duration-200 cursor-pointer text-xs"
-              >
-                Register
-              </button>
-            )}
-          </div>
-
-          <div className="md:hidden">
+            {/* Hamburger */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800/50 transition-colors duration-200"
+              className="md:hidden flex flex-col justify-center items-center gap-1.5"
+              style={{
+                background: 'none',
+                border: '1px solid rgba(240,237,230,0.10)',
+                borderRadius: '8px',
+                width: '38px',
+                height: '38px',
+                cursor: 'pointer',
+              }}
+              aria-label="Toggle menu"
             >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
+              <motion.span
+                style={{
+                  display: 'block',
+                  width: '16px',
+                  height: '1.5px',
+                  background: '#F0EDE6',
+                  borderRadius: '2px',
+                }}
+                animate={{ rotate: isMenuOpen ? 45 : 0, y: isMenuOpen ? 5 : 0 }}
+                transition={{ duration: 0.2 }}
+              />
+              <motion.span
+                style={{
+                  display: 'block',
+                  width: '16px',
+                  height: '1.5px',
+                  background: '#F0EDE6',
+                  borderRadius: '2px',
+                }}
+                animate={{ opacity: isMenuOpen ? 0 : 1 }}
+                transition={{ duration: 0.15 }}
+              />
+              <motion.span
+                style={{
+                  display: 'block',
+                  width: '16px',
+                  height: '1.5px',
+                  background: '#F0EDE6',
+                  borderRadius: '2px',
+                }}
+                animate={{ rotate: isMenuOpen ? -45 : 0, y: isMenuOpen ? -5 : 0 }}
+                transition={{ duration: 0.2 }}
+              />
             </button>
           </div>
         </div>
-
-        {isMenuOpen && (
-          <div className="md:hidden absolute left-0 right-0 top-full bg-slate-800/95 backdrop-blur-md border-t border-slate-700/50 shadow-lg">
-            <div className="px-4 pt-4 pb-6 space-y-1">
-              <button 
-                onClick={() => scrollToSection('about')}
-                className="block w-full text-left px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all duration-200 font-medium text-sm"
-              >
-                About
-              </button>
-              <button 
-                onClick={() => scrollToSection('courses')}
-                className="block w-full text-left px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all duration-200 font-medium text-sm"
-              >
-                Courses
-              </button>
-              <button 
-                onClick={() => scrollToSection('gallery')}
-                className="block w-full text-left px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all duration-200 font-medium text-sm"
-              >
-                Gallery
-              </button>
-              <button 
-                onClick={() => scrollToSection('educators')}
-                className="block w-full text-left px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all duration-200 font-medium text-sm"
-              >
-                Educators
-              </button>
-              {isAuthenticated ? (
-                <div className="px-4 py-3 border-t border-slate-700/50">
-                  <div className="text-slate-300 text-sm mb-2" onClick={()=>router.push('/dashboard')}>Dashboard</div>
-                  {/* <button 
-                    onClick={logout}
-                    className="block w-full text-left px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all duration-200 font-medium text-sm"
-                  >
-                    Logout
-                  </button> */}
-                </div>
-              ) : (
-                <button 
-                  onClick={handleRegisterClick}
-                  className="block w-full text-left px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-all duration-200 mt-4 font-semibold text-sm"
-                >
-                  Register Now
-                </button>
-              )}
-            </div>
-          </div>
-        )}
       </div>
-    </nav>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="md:hidden"
+            style={{
+              background: '#0C0C0C',
+              borderTop: '1px solid rgba(240,237,230,0.06)',
+              overflow: 'hidden',
+            }}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+          >
+            <div className="container-fm" style={{ paddingTop: '12px', paddingBottom: '16px' }}>
+              {navLinks.map((link, i) => (
+                <motion.button
+                  key={link.section}
+                  onClick={() => scrollToSection(link.section)}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    textAlign: 'left',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: 500,
+                    fontSize: '15px',
+                    color: '#6B6B6B',
+                    padding: '11px 4px',
+                    borderBottom: '1px solid rgba(240,237,230,0.04)',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#F0EDE6')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#6B6B6B')}
+                >
+                  {link.label}
+                </motion.button>
+              ))}
+              <motion.button
+                onClick={handleMasterclasstClick}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: navLinks.length * 0.04 }}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 600,
+                  fontSize: '15px',
+                  color: '#D4AF37',
+                  padding: '11px 4px',
+                  borderBottom: '1px solid rgba(240,237,230,0.04)',
+                }}
+              >
+                Masterclass
+              </motion.button>
+              <div style={{ paddingTop: '14px' }}>
+                <button
+                  onClick={handleRegisterClick}
+                  className="btn-primary"
+                  style={{ width: '100%', padding: '12px', fontSize: '15px' }}
+                >
+                  {isAuthenticated ? 'Dashboard' : 'Get Started'}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 };
 

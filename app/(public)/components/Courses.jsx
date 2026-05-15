@@ -1,12 +1,342 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import publicApi from "../../../lib/publicApi";
-// import PaymentGateway from "./paymentGateway";
-import usePaymentGateway from "../../../hooks/usePaymentGateway";
-import { useUserAuth } from "../../../hooks/useUserAuth";
-import { useUserModal } from "../../../hooks/useUserModal";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import publicApi from '../../../lib/publicApi';
+import usePaymentGateway from '../../../hooks/usePaymentGateway';
+import { useUserAuth } from '../../../hooks/useUserAuth';
+import { useUserModal } from '../../../hooks/useUserModal';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, delay: i * 0.1, ease: 'easeOut' },
+  }),
+};
+
+function CourseCard({ course, useForm, formUrl }) {
+  const router = useRouter();
+  const { user } = useUserAuth();
+  const { openLogin, openBilling } = useUserModal();
+
+  const { loading, isDisabled } = usePaymentGateway({
+    courseId: course._id,
+    courseName: course.name,
+  });
+
+  const isEnrolled =
+    Array.isArray(user?.courses) &&
+    user.courses.some((c) => {
+      const cid = c?.courseId?._id || c.courseId;
+      return String(cid) === String(course._id);
+    });
+
+  const onClick = () => {
+    if (isEnrolled) return;
+    if (!user) return openLogin();
+    if (useForm && formUrl) {
+      window.open(formUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    openBilling(course);
+  };
+
+  const handleViewDetails = (e) => {
+    e.stopPropagation();
+    router.push(`/course/${course._id}`);
+  };
+
+  const disabled = isEnrolled || (!useForm && isDisabled);
+
+  return (
+    <motion.div
+      whileHover={{ y: -4, transition: { duration: 0.25 } }}
+      style={{
+        width: '100%',
+        maxWidth: '340px',
+        display: 'flex',
+        flexDirection: 'column',
+        background: '#111827',
+        border: '1px solid rgba(240,237,230,0.07)',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        transition: 'border-color 0.25s ease',
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(240,237,230,0.14)')}
+      onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'rgba(240,237,230,0.07)')}
+    >
+      {/* Top amber accent line */}
+      <div style={{ height: '2px', background: '#D4AF37', flexShrink: 0 }} />
+
+      <div style={{ padding: '28px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+
+        {/* Course name */}
+        <h3
+          onClick={handleViewDetails}
+          style={{
+            fontFamily: 'Bricolage Grotesque, sans-serif',
+            fontWeight: 700,
+            fontSize: '19px',
+            color: '#F0EDE6',
+            lineHeight: 1.3,
+            marginBottom: '20px',
+            cursor: 'pointer',
+          }}
+        >
+          {course.name}
+        </h3>
+
+        {/* Price block */}
+        <div
+          style={{
+            background: '#1A2035',
+            border: '1px solid rgba(240,237,230,0.05)',
+            borderRadius: '10px',
+            padding: '16px',
+            marginBottom: '18px',
+          }}
+        >
+          {course.price && (
+            <div
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '12px',
+                color: '#3A3A3A',
+                textDecoration: 'line-through',
+                marginBottom: '4px',
+              }}
+            >
+              Rs {course.price}
+            </div>
+          )}
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '10px', flexWrap: 'wrap' }}>
+            <span
+              style={{
+                fontFamily: 'Bricolage Grotesque, sans-serif',
+                fontWeight: 800,
+                fontSize: '30px',
+                color: '#D4AF37',
+                lineHeight: 1,
+              }}
+            >
+              Rs {course.discountPrice}
+            </span>
+            {course.earlyBirdTitle && (
+              <span
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  padding: '3px 10px',
+                  borderRadius: '100px',
+                  background: 'rgba(212,175,55,0.10)',
+                  color: '#D4AF37',
+                  border: '1px solid rgba(212,175,55,0.25)',
+                  marginBottom: '2px',
+                }}
+              >
+                {course.earlyBirdTitle}
+              </span>
+            )}
+          </div>
+          <div
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '11px',
+              color: '#3A3A3A',
+              marginTop: '4px',
+            }}
+          >
+            18% GST Applied
+          </div>
+        </div>
+
+        {/* Duration */}
+        {course.duration && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              marginBottom: '16px',
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+            <span
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '13px',
+                fontWeight: 500,
+                color: '#D4AF37',
+              }}
+            >
+              {course.duration}
+            </span>
+          </div>
+        )}
+
+        {/* Description */}
+        {course.description && (
+          <p
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '13px',
+              color: '#6B6B6B',
+              lineHeight: 1.65,
+              marginBottom: '20px',
+            }}
+          >
+            {course.description}
+          </p>
+        )}
+
+        {/* Features list */}
+        {Array.isArray(course.features) && course.features.length > 0 && (
+          <ul style={{ listStyle: 'none', marginBottom: '24px', flex: 1 }}>
+            {course.features.map((f, i) => (
+              <li
+                key={i}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '10px',
+                  marginBottom: '9px',
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    color: '#D4AF37',
+                    lineHeight: '1.5',
+                    flexShrink: 0,
+                  }}
+                >
+                  +
+                </span>
+                <span
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '13px',
+                    color: '#6B6B6B',
+                    lineHeight: 1.55,
+                  }}
+                >
+                  {f}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Action buttons */}
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <button
+            onClick={handleViewDetails}
+            style={{
+              width: '100%',
+              padding: '11px',
+              background: 'transparent',
+              border: '1px solid rgba(240,237,230,0.18)',
+              borderRadius: '10px',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '13px',
+              fontWeight: 600,
+              color: '#F0EDE6',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              transition: 'border-color 0.2s ease, background 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(240,237,230,0.35)';
+              e.currentTarget.style.background = 'rgba(240,237,230,0.04)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(240,237,230,0.18)';
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            View Details
+          </button>
+
+          {course.brochurePdf && (
+            <a
+              href={course.brochurePdf}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                width: '100%',
+                padding: '11px',
+                background: 'transparent',
+                border: '1px solid rgba(240,237,230,0.07)',
+                borderRadius: '10px',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: '#6B6B6B',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                textDecoration: 'none',
+                transition: 'border-color 0.2s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(240,237,230,0.18)')}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'rgba(240,237,230,0.07)')}
+            >
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download Brochure
+            </a>
+          )}
+
+          <button
+            onClick={onClick}
+            disabled={disabled}
+            style={{
+              width: '100%',
+              padding: '12px',
+              borderRadius: '10px',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '14px',
+              fontWeight: 700,
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              border: isEnrolled ? '1px solid rgba(212,175,55,0.3)' : 'none',
+              background: isEnrolled ? 'rgba(212,175,55,0.08)' : '#D4AF37',
+              color: isEnrolled ? '#D4AF37' : '#0B0F1A',
+              opacity: disabled && !isEnrolled ? 0.55 : 1,
+              transition: 'opacity 0.2s ease',
+            }}
+          >
+            {isEnrolled
+              ? 'Enrolled'
+              : loading
+              ? 'Processing...'
+              : 'Enroll Now'}
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 const Courses = ({ initialCourses = null, initialCategories = null }) => {
   const [courses, setCourses] = useState(initialCourses || []);
@@ -14,126 +344,25 @@ const Courses = ({ initialCourses = null, initialCategories = null }) => {
   const [loading, setLoading] = useState(initialCourses === null);
   const [error, setError] = useState(null);
 
-  const formUrl = "https://forms.gle/r1YpmDKVj7U3AdJ3A";
-
-  function CourseCard({ course, useForm, formUrl }) {
-    const router = useRouter();
-    const {user} = useUserAuth();
-    const { openLogin, openBilling } = useUserModal();
-
-    const { initiatePayment, loading, isDisabled } = usePaymentGateway({
-      courseId: course._id,
-      courseName: course.name,
-    });
-
-    const isEnrolled = Array.isArray(user?.courses) && user.courses.some(c => {
-      const cid = c?.courseId?._id || c.courseId;
-      return String(cid) === String(course._id);
-    });
-
-    const onClick = () => {
-      if(isEnrolled) return;
-      if(!user) return openLogin();
-      if(useForm && formUrl) {
-        window.open(formUrl, "_blank", "noopener,noreferrer");
-        return;
-      }
-      openBilling(course);
-    }
-
-    const handleViewDetails = (e) => {
-      e.stopPropagation();
-      router.push(`/course/${course._id}`);
-    };
-
-    const disabled = isEnrolled || (!useForm && isDisabled);
-  
-    return (
-      <div className="w-full text-center sm:w-[22rem] md:w-[22rem] relative bg-slate-800/60 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
-        <div>
-          <h3 
-            className="text-2xl font-semibold text-white mb-4 cursor-pointer hover:text-emerald-400 transition-colors"
-            onClick={handleViewDetails}
-          >
-            {course.name}
-          </h3>
-          <div className="mb-4 mt-2">
-            <div className="text-xl text-slate-400 line-through">₹{course.price}</div>
-            <div className="text-2xl font-bold text-emerald-400">
-              ₹{course.discountPrice} <span className="text-sm text-slate-400">({course.earlyBirdTitle})</span>
-            </div>
-            <span className="text-xs text-slate-400">18% GST Applied</span>
-          </div>
-          <p className="text-slate-300 text-sm leading-relaxed">{course.description}</p>
-          <div className="text-sm font-medium mt-4 mb-4 text-emerald-300">⏳ {course.duration}</div>
-          <ul className="space-y-3 text-start">
-            {course.features.map((f, i) => (
-              <li key={i} className="flex items-start text-slate-300 text-sm">
-                <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full mt-1.5 mr-3 flex-shrink-0"></span>
-                {f}
-              </li>
-            ))}
-          </ul>
-        </div>
-  
-        <div className="space-y-3 pt-5">
-          <button
-            onClick={handleViewDetails}
-            className="w-full flex items-center justify-center gap-2 bg-slate-700 text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-600 transition duration-300 shadow-md hover:shadow-slate-400/20 cursor-pointer"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-            View Details
-          </button>
-          
-          {course.brochurePdf && (
-            <a
-              href={course.brochurePdf}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 bg-slate-700 text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-600 transition duration-300 shadow-md hover:shadow-slate-400/20 cursor-pointer"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              View Brochure
-            </a>
-          )}
-          
-          <button
-            onClick={onClick}
-            disabled={disabled}
-            className="w-full bg-emerald-500 text-white font-semibold py-3 px-4 rounded-lg hover:bg-emerald-600 transition duration-300 shadow-md hover:shadow-emerald-400/40 disabled:bg-gray-500 disabled:cursor-not-allowed cursor-pointer"
-          >
-            {isEnrolled ? 'Enrolled' : (loading ? 'Processing...' : 'Enroll Now')}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   useEffect(() => {
-    // Skip API calls if data is already provided via props
-    if (initialCourses !== null && initialCategories !== null) {
-      return;
-    }
+    if (initialCourses !== null && initialCategories !== null) return;
 
     let mounted = true;
     (async () => {
       try {
         setLoading(true);
-        const res = await publicApi.get("/api/course");
-        const categoriesRes = await publicApi.get("/api/category");
+        const res = await publicApi.get('/api/course');
+        const categoriesRes = await publicApi.get('/api/category');
         if (mounted) {
           setCategories(categoriesRes?.data?.categories || []);
           const list = Array.isArray(res?.data?.courses) ? res.data.courses : [];
-          // Optionally filter only active courses
-          setCourses(list.filter(c => c.isActive));
+          setCourses(list.filter((c) => c.isActive));
         }
       } catch (e) {
-        if (mounted) setError(e?.response?.data?.msg || e.message || "Failed to load courses");
+        if (mounted)
+          setError(
+            e?.response?.data?.msg || e.message || 'Failed to load courses'
+          );
       } finally {
         if (mounted) setLoading(false);
       }
@@ -141,18 +370,44 @@ const Courses = ({ initialCourses = null, initialCategories = null }) => {
     return () => { mounted = false; };
   }, [initialCourses, initialCategories]);
 
-  const coursesForCategory = (categoryId) => {
-    return courses.filter(c => {
-      if(!Array.isArray(c.categories)) return false;
-      return c.categories.some(catRef => String(catRef?._id || catRef) === String(categoryId));
+  const coursesForCategory = (categoryId) =>
+    courses.filter((c) => {
+      if (!Array.isArray(c.categories)) return false;
+      return c.categories.some(
+        (catRef) => String(catRef?._id || catRef) === String(categoryId)
+      );
     });
-  }
 
   if (loading) {
     return (
-      <section id="courses" className="py-20 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-          <div className="text-center text-slate-300">Loading courses...</div>
+      <section
+        id="courses"
+        style={{ background: '#0B0F1A', padding: '96px 0' }}
+      >
+        <div className="container-fm" style={{ textAlign: 'center' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '12px',
+              color: '#6B6B6B',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '14px',
+            }}
+          >
+            <motion.div
+              style={{
+                width: '18px',
+                height: '18px',
+                borderRadius: '50%',
+                border: '2px solid #D4AF37',
+                borderTopColor: 'transparent',
+              }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
+            />
+            Loading courses...
+          </div>
         </div>
       </section>
     );
@@ -160,78 +415,235 @@ const Courses = ({ initialCourses = null, initialCategories = null }) => {
 
   if (error) {
     return (
-      <section id="courses" className="py-20 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-          <div className="text-center text-red-400">{error}</div>
+      <section
+        id="courses"
+        style={{
+          background: '#0B0F1A',
+          padding: '96px 0',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'rgba(240,237,230,0.07)' }} />
+        <div className="container-fm">
+          <div
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              color: '#D4AF37',
+              marginBottom: '16px',
+            }}
+          >
+            Courses
+          </div>
+          <h2
+            style={{
+              fontFamily: 'Bricolage Grotesque, sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(32px, 4.5vw, 52px)',
+              lineHeight: 1.05,
+              letterSpacing: '-0.03em',
+              color: '#F0EDE6',
+              marginBottom: '48px',
+              maxWidth: '600px',
+            }}
+          >
+            Your Path to{' '}
+            <span style={{ color: '#D4AF37' }}>AI Mastery</span>
+          </h2>
+          <div
+            style={{
+              background: '#111827',
+              border: '1px solid rgba(240,237,230,0.07)',
+              borderLeft: '3px solid #D4AF37',
+              borderRadius: '12px',
+              padding: '40px',
+              maxWidth: '600px',
+            }}
+          >
+            <p
+              style={{
+                fontFamily: 'Bricolage Grotesque, sans-serif',
+                fontWeight: 700,
+                fontSize: '20px',
+                color: '#F0EDE6',
+                marginBottom: '10px',
+              }}
+            >
+              Courses launching soon
+            </p>
+            <p
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '14px',
+                color: '#6B6B6B',
+                lineHeight: 1.65,
+                marginBottom: '20px',
+              }}
+            >
+              Our upcoming cohorts are being finalized. In the meantime, explore the AI Mastery Masterclass, a live intensive session open now.
+            </p>
+            <a
+              href="/ai-mastery"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px 22px',
+                background: '#D4AF37',
+                borderRadius: '10px',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '13px',
+                fontWeight: 700,
+                color: '#0B0F1A',
+                textDecoration: 'none',
+              }}
+            >
+              View AI Mastery Masterclass
+              <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" /></svg>
+            </a>
+          </div>
         </div>
       </section>
     );
   }
-  
 
   return (
-    <section id="courses" className="py-20 bg-slate-900">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
-            Your Path to <span>AI Mastery</span>
+    <section
+      id="courses"
+      style={{
+        background: '#0B0F1A',
+        padding: '96px 0',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '1px',
+          background: 'rgba(240,237,230,0.07)',
+        }}
+      />
+
+      <div className="container-fm">
+
+        {/* Section header */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          style={{ marginBottom: '72px' }}
+        >
+          <div
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              color: '#D4AF37',
+              marginBottom: '16px',
+            }}
+          >
+            Courses
+          </div>
+          <h2
+            style={{
+              fontFamily: 'Bricolage Grotesque, sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(32px, 4.5vw, 52px)',
+              lineHeight: 1.05,
+              letterSpacing: '-0.03em',
+              color: '#F0EDE6',
+              marginBottom: '16px',
+              maxWidth: '600px',
+            }}
+          >
+            Your Path to{' '}
+            <span style={{ color: '#D4AF37' }}>AI Mastery</span>
           </h2>
-        </div>
-        <div className="flex flex-col gap-16 ">
-          {categories.map((category) => {
+          <p
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '16px',
+              color: '#6B6B6B',
+              maxWidth: '480px',
+              lineHeight: 1.65,
+            }}
+          >
+            Industry-designed programs that take you from curious to capable. Fast.
+          </p>
+        </motion.div>
+
+        {/* Categories + courses */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '72px' }}>
+          {categories.map((category, ci) => {
             const catCourses = coursesForCategory(category._id);
-            if(!catCourses.length) return null;
+            if (!catCourses.length) return null;
 
             return (
-              <div key={category._id}>
-                <div className="mb-6">
-                  <h3 className="text-3xl text-center font-bold text-emerald-400 uppercase text-4xl mb-1">{category.name}</h3>
-                  <div className="w-28 h-1 bg-emerald-400 mx-auto mb-6"></div>
-                  <p className="text-slate-300 mt-2 text-center text-lg max-w-3xl mx-auto text-bold">{category.description}</p>
+              <motion.div
+                key={category._id}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={ci}
+              >
+                {/* Category heading */}
+                <div style={{ marginBottom: '32px' }}>
+                  <h3
+                    style={{
+                      fontFamily: 'Bricolage Grotesque, sans-serif',
+                      fontWeight: 800,
+                      fontSize: '26px',
+                      color: '#D4AF37',
+                      marginBottom: '8px',
+                    }}
+                  >
+                    {category.name}
+                  </h3>
+                  {category.description && (
+                    <p
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '14px',
+                        color: '#6B6B6B',
+                        maxWidth: '600px',
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      {category.description}
+                    </p>
+                  )}
                 </div>
 
-                <div className="flex flex-wrap items-start justify-center gap-10 mx-auto">
-                  {catCourses.map((course, idx) => {
-                    // const useForm = idx >= catCourses.length - 2;
-                    return (
-                      <CourseCard 
-                        key={course._id} 
-                        course={course} 
-                        //useForm={useForm} 
-                        //formUrl={formUrl} 
-                      />
-                    )
-                  })}
+                {/* Cards row */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '20px',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                  }}
+                >
+                  {catCourses.map((course) => (
+                    <CourseCard key={course._id} course={course} />
+                  ))}
                 </div>
-              </div>
-            )
+              </motion.div>
+            );
           })}
         </div>
-        
-
-        {/* <div className="mt-24 text-center">
-          <div className="bg-slate-800/70 backdrop-blur-sm border border-slate-700 rounded-2xl p-12 max-w-4xl mx-auto shadow-lg hover:shadow-emerald-500/20 transition-all">
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Project Examples You'll Create 
-            </h3>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
-              {[
-                "AI-powered customer service chatbot for e-commerce",
-                "Predictive analytics dashboard for business insights",
-                "Automated content generation system",
-                "AI-driven recommendation engine",
-              ].map((project, i) => (
-                <li
-                  key={i}
-                  className="flex items-start text-slate-300 text-base"
-                >
-                  <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full mt-2 mr-3"></span>
-                  {project}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div> */}
       </div>
     </section>
   );

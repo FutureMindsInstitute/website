@@ -1,270 +1,287 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
-/* Future Minds Institute Color Palette */
+/* ============================================
+   FUTURE MINDS INSTITUTE — AMBER EDITORIAL DESIGN SYSTEM
+   ============================================ */
+
 :root {
-  --primary-dark: #24333b;
-  --secondary-light: #e4e9eb;
-  --accent-gold: #aa9f85;
-  --muted-gray: #798085;
-  --dark-gray: #5f605f;
-  --sage-green: #6a6e66;
-  --slate-blue: #4f575b;
-  --deep-brown: #32290c;
-  --cool-gray: #454b54;
-  --light-gray: #8c9c9c;
+  /* Backgrounds — navy-dark */
+  --bg:           #0B0F1A;
+  --surface:      #111827;
+  --surface-up:   #1A2035;
+
+  /* Text */
+  --text-primary:   #F0EDE6;
+  --text-secondary: #6B7280;
+  --text-muted:     #374151;
+
+  /* Accent — warm gold (from logo) */
+  --accent:        #D4AF37;
+  --accent-dim:    rgba(201, 168, 76, 0.10);
+  --accent-border: rgba(201, 168, 76, 0.25);
+
+  /* Borders */
+  --border:       rgba(240, 237, 230, 0.07);
+  --border-hover: rgba(240, 237, 230, 0.14);
+
+  /* Radius */
+  --radius:    12px;
+  --radius-lg: 16px;
 }
 
-/* Custom color classes for Future Minds Institute */
-.bg-primary-dark { background-color: var(--primary-dark); }
-.bg-secondary-light { background-color: var(--secondary-light); }
-.bg-accent-gold { background-color: var(--accent-gold); }
-.bg-muted-gray { background-color: var(--muted-gray); }
-.bg-sage-green { background-color: var(--sage-green); }
-.bg-slate-blue { background-color: var(--slate-blue); }
-.bg-cool-gray { background-color: var(--cool-gray); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-.text-primary-dark { color: var(--primary-dark); }
-.text-secondary-light { color: var(--secondary-light); }
-.text-accent-gold { color: var(--accent-gold); }
-.text-muted-gray { color: var(--muted-gray); }
-.text-sage-green { color: var(--sage-green); }
-.text-slate-blue { color: var(--slate-blue); }
-.text-cool-gray { color: var(--cool-gray); }
-
-.border-accent-gold { border-color: var(--accent-gold); }
-.border-muted-gray { border-color: var(--muted-gray); }
-.border-sage-green { border-color: var(--sage-green); }
-
-/* Professional Typography System */
 body {
   font-family: 'Inter', sans-serif;
-  font-weight: 400;
+  background-color: var(--bg);
+  color: var(--text-primary);
   line-height: 1.6;
-  letter-spacing: -0.01em;
-  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Professional Heading Hierarchy */
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  line-height: 1.1;
+/* ---- Scrollbar — thin amber ---- */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(232,160,48,0.7); }
+
+/* ---- Typography ---- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  line-height: 1.08;
   letter-spacing: -0.03em;
+  color: var(--text-primary);
 }
 
-h2 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-h3 {
+/* ---- Section number label ---- */
+.section-num {
   font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-}
-
-h4 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: -0.005em;
-}
-
-h5, h6 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-/* Professional Text Styles */
-.text-hero {
-  font-family: 'Playfair Display', serif;
+  font-size: 11px;
   font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-}
-
-.text-display {
-  font-family: 'Playfair Display', serif;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-.text-heading {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-}
-
-.text-body {
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: -0.005em;
-}
-
-.text-body-medium {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: -0.005em;
-}
-
-.text-caption {
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  line-height: 1.4;
-  font-size: 0.875rem;
-  letter-spacing: 0.01em;
-}
-
-.text-label {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  line-height: 1.4;
-  font-size: 0.875rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.15em;
+  color: #D4AF37;
   text-transform: uppercase;
 }
 
-/* Professional Button Typography */
+/* ---- Container ---- */
+.container-fm {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+@media (max-width: 768px) {
+  .container-fm { padding: 0 16px; }
+}
+
+/* ---- Cards ---- */
+.card {
+  background: #141414;
+  border: 1px solid rgba(240, 237, 230, 0.07);
+  border-radius: 12px;
+  transition: border-color 0.25s ease;
+}
+.card:hover { border-color: rgba(240, 237, 230, 0.14); }
+
+/* ---- Buttons ---- */
 .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #D4AF37 !important;
+  color: #0B0F1A !important;
   font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  letter-spacing: -0.005em;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+  gap: 8px;
+}
+.btn-primary:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  letter-spacing: -0.005em;
-}
-
-/* Professional Card Typography */
-.card-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #F0EDE6;
   font-family: 'Inter', sans-serif;
   font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  font-size: 14px;
+  border: 1px solid rgba(240, 237, 230, 0.18);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+  gap: 8px;
+}
+.btn-secondary:hover {
+  border-color: rgba(240, 237, 230, 0.35);
+  background: rgba(240, 237, 230, 0.04);
 }
 
-.card-subtitle {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: -0.005em;
+/* ---- CSS grid background ---- */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(240, 237, 230, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 237, 230, 0.022) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
-.card-body {
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: -0.005em;
+/* ---- Marquee animation ---- */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
+.marquee-track { animation: marquee 42s linear infinite; }
+.marquee-track:hover { animation-play-state: paused; }
 
-/* Custom Scrollbar Styling - Future Minds Institute Palette */
-::-webkit-scrollbar {
-  width: 12px;
+/* ---- Shimmer line ---- */
+@keyframes shimmer-line {
+  0%   { transform: translateX(-300px); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translateX(110vw);  opacity: 0; }
 }
-
-::-webkit-scrollbar-track {
-  background: var(--primary-dark);
-  border-radius: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--accent-gold), var(--sage-green));
-  border-radius: 6px;
-  border: 2px solid var(--primary-dark);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--sage-green), var(--accent-gold));
-}
-
-::-webkit-scrollbar-corner {
-  background: var(--primary-dark);
-}
-
-/* Firefox Scrollbar */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent-gold) var(--primary-dark);
-}
-
-/* Custom Focus Styles - Future Minds Institute Palette */
-*:focus {
-  outline: none !important;
-}
-
-/* Navigation Button Focus Styles */
-button:focus-visible {
-  outline: none !important;
-  position: relative;
-}
-
-button:focus-visible::after {
-  content: '';
+.shimmer-line {
   position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent-gold), var(--sage-green));
-  border-radius: 1px;
-  animation: focusUnderline 0.3s ease-in-out;
-}
-
-@keyframes focusUnderline {
-  from {
-    width: 0%;
-    opacity: 0;
-  }
-  to {
-    width: 80%;
-    opacity: 1;
-  }
-}
-
-/* Link Focus Styles */
-a:focus-visible {
-  outline: none !important;
-  position: relative;
-}
-
-a:focus-visible::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
+  top: 48%;
   left: 0;
-  width: 100%;
+  width: 240px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  animation: shimmer-line 8s ease-in-out infinite;
+  pointer-events: none;
+}
+.shimmer-line-2 {
+  top: 28%;
+  opacity: 0.28;
+  animation-delay: 4s;
+}
+
+/* ============ LEGACY COMPAT ALIASES ============ */
+.bg-void  { background-color: var(--bg); }
+.bg-deep  { background-color: var(--surface); }
+
+.glass-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.glass-card-hover {
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.glass-card-hover:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+}
+.border-glow-animated { border-radius: var(--radius); }
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 14px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.btn-glow {
+  background: var(--accent);
+  color: #0B0F1A;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.btn-glow:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.btn-outline-glow {
+  background: transparent;
+  color: #F0EDE6;
+  border: 1px solid rgba(240, 237, 230, 0.18);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.btn-outline-glow:hover {
+  border-color: rgba(240, 237, 230, 0.35);
+  background: rgba(240, 237, 230, 0.04);
+}
+
+.section-divider {
+  width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent-gold), var(--sage-green));
-  border-radius: 1px;
-  animation: focusUnderline 0.3s ease-in-out;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 0 auto;
 }
 
-/* Input Focus Styles */
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: none !important;
-  border-color: var(--accent-gold) !important;
-  box-shadow: 0 0 0 2px var(--accent-gold) !important;
+.grid-overlay {
+  background-image:
+    linear-gradient(rgba(240, 237, 230, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 237, 230, 0.022) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
-/* Remove default focus styles */
-button:focus,
-a:focus,
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none !important;
+/* Gradient text aliases — resolve to amber */
+.gradient-text-main   { color: var(--accent); }
+.gradient-text-cyan   { color: var(--accent); }
+.gradient-text-violet { color: var(--accent); }
+
+/* Orbs suppressed */
+.orb-cyan    { display: none; }
+.orb-violet  { display: none; }
+.orb-magenta { display: none; }
+
+/* Old animation stubs */
+.pulse-glow { }
+.float-anim { }
+
+/* CSS vars for old inline style references */
+:root {
+  --cyan:          var(--accent);
+  --cyan-dim:      var(--accent-dim);
+  --violet:        var(--accent);
+  --violet-dim:    rgba(232,160,48,0.06);
+  --magenta:       var(--accent);
+  --magenta-dim:   rgba(232,160,48,0.06);
+  --bg-void:       var(--bg);
+  --bg-deep:       var(--surface);
+  --bg-surface:    var(--surface-up);
+  --bg-glass:      var(--surface);
+  --border-subtle: var(--border);
+  --border-glow:   var(--border-hover);
+
+  /* Section tag alias */
+  --section-tag-color: #D4AF37;
+}
+
+/* Section tag utility (old naming) */
+.section-tag {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #D4AF37;
 }
