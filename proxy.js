@@ -4,7 +4,7 @@ import { createRateLimiter } from './lib/rateLimit';
 // Global rate limiter: 200 requests per 15 minutes per IP
 const globalRateLimiter = createRateLimiter(15 * 60 * 1000, 200);
 
-export function middleware(request) {
+export function proxy(request) {
   const { pathname } = request.nextUrl;
 
   // Protect /admin routes (except /admin/login)
