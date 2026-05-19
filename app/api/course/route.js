@@ -3,8 +3,7 @@ import connectDB from '../../../lib/db';
 import Course from '../../../models/Course';
 import Category from '../../../models/Category';
 
-// Cache the response for 60 seconds (ISR-like behavior)
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {

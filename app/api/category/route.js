@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '../../../lib/db';
 import Category from '../../../models/Category';
 
-// Cache the response for 60 seconds (ISR-like behavior)
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export async function GET(req) {
   try {
