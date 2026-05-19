@@ -6,14 +6,14 @@ import Course from '../../../../../models/Course';
 import Coupon from '../../../../../models/Coupon';
 import userAuth from '../../../../../middleware/userAuth';
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZ_KEY_ID,
-  key_secret: process.env.RAZ_KEY_SECRET,
-});
-
 async function handler(req, { params }) {
   try {
     await connectDB();
+
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZ_KEY_ID,
+      key_secret: process.env.RAZ_KEY_SECRET,
+    });
 
     const userId = (await params).userId;
     const body = await req.json();
