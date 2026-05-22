@@ -5,23 +5,35 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { THEME } from '@/lib/constants';
 
 const galleryImages = [
-  { src: '/assets/gallery/IMG_7742.JPG',                                                             alt: 'FMI Workshop session' },
-  { src: '/assets/gallery/C4A06ACD-3355-4BE6-A55A-D9455E321E8F_1_102_o (3).jpeg',                  alt: 'Students collaborating' },
-  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg',                  alt: 'Hands-on AI training' },
-  { src: '/assets/gallery/e81d4bc9-751b-40cc-86d5-c513b3fbc65b-copied-media~2.jpg',                 alt: 'Group learning session' },
-  { src: '/assets/gallery/IMG_8668.JPG',                                                             alt: 'Industry expert session' },
-  { src: '/assets/gallery/IMG_9916.JPG',                                                             alt: 'Student presentations' },
-  { src: '/assets/gallery/IMG_0024 (2).jpg',                                                         alt: 'Workshop highlights' },
-  { src: '/assets/gallery/IMG_0030 (1).jpg',                                                         alt: 'Project building session' },
-  { src: '/assets/gallery/IMG_0538.JPG',                                                             alt: 'Graduation cohort' },
-  { src: '/assets/gallery/IMG_0568.JPG',                                                             alt: 'AI tools workshop' },
-  { src: '/assets/gallery/IMG_0586.JPG',                                                             alt: 'Mentorship session' },
-  { src: '/assets/gallery/IMG_4657.JPG',                                                             alt: 'Community event' },
+  { src: '/assets/gallery/IMG_3764.JPG',                                                              alt: 'FMI Workshop session' },
+  { src: '/assets/gallery/IMG_3743 3.JPG',                                                            alt: 'Students collaborating' },
+  { src: '/assets/gallery/IMG_3458.JPG',                                                              alt: 'Hands-on AI training' },
+  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg',                   alt: 'Group learning session' },
+  { src: '/assets/gallery/IMG_8668.JPG',                                                              alt: 'Industry expert session' },
+  { src: '/assets/gallery/IMG_9916.JPG',                                                              alt: 'Student presentations' },
+  { src: '/assets/gallery/IMG_0024 (2).jpg',                                                          alt: 'Workshop highlights' },
+  { src: '/assets/gallery/IMG_0030 (1).jpg',                                                          alt: 'Project building session' },
+  { src: '/assets/gallery/IMG_2260.JPG',                                                              alt: 'Cohort gathering' },
+  { src: '/assets/gallery/IMG_0568.JPG',                                                              alt: 'AI tools workshop' },
+  { src: '/assets/gallery/IMG_0586.JPG',                                                              alt: 'Mentorship session' },
+  { src: '/assets/gallery/IMG_4657.JPG',                                                              alt: 'Community event' },
+  { src: '/assets/gallery/IMG_4575.JPG',                                                              alt: 'FMI cohort' },
+  { src: '/assets/gallery/IMG_4674.JPG',                                                              alt: 'Live session' },
+  { src: '/assets/gallery/IMG_4765.JPG',                                                              alt: 'Workshop activity' },
+  { src: '/assets/gallery/IMG_4853.JPG',                                                              alt: 'Team building' },
+  { src: '/assets/gallery/IMG_4911.JPG',                                                              alt: 'Expert talk' },
+  { src: '/assets/gallery/IMG_5308.JPG',                                                              alt: 'Learning session' },
+  { src: '/assets/gallery/IMG_5445.JPG',                                                              alt: 'Group discussion' },
+  { src: '/assets/gallery/IMG_6578.JPG',                                                              alt: 'FMI event' },
+  { src: '/assets/gallery/IMG_6844.JPG',                                                              alt: 'Workshop session' },
+  { src: '/assets/gallery/IMG_7092.JPG',                                                              alt: 'Student activity' },
+  { src: '/assets/gallery/IMG_7320.JPG',                                                              alt: 'Cohort event' },
+  { src: '/assets/gallery/IMG_7528.JPG',                                                              alt: 'FMI community' },
 ];
 
 // Split into two rows
-const row1 = galleryImages.slice(0, 6);
-const row2 = galleryImages.slice(6, 12);
+const row1 = galleryImages.slice(0, 12);
+const row2 = galleryImages.slice(12, 24);
 
 const PhotoCard = ({ img, onClick }) => (
   <div
