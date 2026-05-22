@@ -17,86 +17,144 @@ const carouselImages = [
 
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const total = carouselImages.length;
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrent(prev => (prev + 1) % carouselImages.length);
-    }, 3000);
+      setDirection(1);
+      setCurrent(prev => (prev + 1) % total);
+    }, 3500);
     return () => clearInterval(timer);
-  }, []);
+  }, [total]);
+
+  const go = (idx) => {
+    setDirection(idx > current ? 1 : -1);
+    setCurrent(idx);
+  };
+
+  const prev = (current - 1 + total) % total;
+  const next = (current + 1) % total;
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay: 0.4 }}
-      style={{
-        position: 'relative',
-        borderRadius: '16px',
-        overflow: 'hidden',
-        border: '1px solid rgba(212,175,55,0.2)',
-        boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
-        aspectRatio: '4/3',
-        width: '100%',
-      }}
+      style={{ position: 'relative', width: '100%' }}
     >
-      <AnimatePresence mode="wait">
-        <motion.img
-          key={current}
-          src={carouselImages[current]}
-          alt="FMI workshop"
-          initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.6, ease: 'easeInOut' }}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center top',
-            display: 'block',
-          }}
-        />
-      </AnimatePresence>
+      {/* Stacked cards container */}
+      <div style={{ position: 'relative', height: '320px' }}>
 
-      {/* Gradient overlay at bottom */}
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0,
-        height: '60px',
-        background: 'linear-gradient(0deg, rgba(11,15,26,0.7) 0%, transparent 100%)',
-        pointerEvents: 'none',
-      }} />
+        {/* Card behind (next) */}
+        <div style={{
+          position: 'absolute',
+          top: '16px', left: '16px', right: '-16px',
+          height: '100%',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          opacity: 0.35,
+          transform: 'scale(0.94)',
+          border: '1px solid rgba(212,175,55,0.1)',
+        }}>
+          <img src={carouselImages[next]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+        </div>
+
+        {/* Main active card */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0, x: direction * 60, scale: 0.96 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -direction * 40, scale: 0.97 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              borderRadius: '16px',
+              overflow: 'hidden',
+              border: '1px solid rgba(212,175,55,0.3)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,175,55,0.08)',
+            }}
+          >
+            <img
+              src={carouselImages[current]}
+              alt="FMI session"
+              style={{
+                width: '100%', height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+                display: 'block',
+              }}
+            />
+            {/* Bottom gradient */}
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0,
+              height: '80px',
+              background: 'linear-gradient(0deg, rgba(11,15,26,0.8) 0%, transparent 100%)',
+            }} />
+            {/* Gold top bar */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+              background: 'linear-gradient(90deg, #D4AF37 0%, rgba(212,175,55,0.3) 60%, transparent 100%)',
+            }} />
+            {/* Counter */}
+            <div style={{
+              position: 'absolute', bottom: '14px', right: '16px',
+              fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 700,
+              color: 'rgba(212,175,55,0.7)', letterSpacing: '0.08em',
+            }}>
+              {String(current + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Prev / Next arrows */}
+        <button
+          onClick={() => go(prev)}
+          style={{
+            position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)',
+            zIndex: 20, width: '32px', height: '32px', borderRadius: '50%',
+            background: 'rgba(11,15,26,0.7)', border: '1px solid rgba(212,175,55,0.3)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', color: '#D4AF37',
+          }}
+        >
+          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+        <button
+          onClick={() => go(next)}
+          style={{
+            position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
+            zIndex: 20, width: '32px', height: '32px', borderRadius: '50%',
+            background: 'rgba(11,15,26,0.7)', border: '1px solid rgba(212,175,55,0.3)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', color: '#D4AF37',
+          }}
+        >
+          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+      </div>
 
       {/* Dot indicators */}
-      <div style={{
-        position: 'absolute', bottom: '12px', left: 0, right: 0,
-        display: 'flex', justifyContent: 'center', gap: '6px',
-      }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '16px' }}>
         {carouselImages.map((_, i) => (
           <button
             key={i}
-            onClick={() => setCurrent(i)}
+            onClick={() => go(i)}
             style={{
-              width: i === current ? '20px' : '6px',
+              width: i === current ? '24px' : '6px',
               height: '6px',
               borderRadius: '3px',
               border: 'none',
-              background: i === current ? '#D4AF37' : 'rgba(240,237,230,0.3)',
+              background: i === current ? '#D4AF37' : 'rgba(240,237,230,0.2)',
               cursor: 'pointer',
               padding: 0,
-              transition: 'all 0.3s ease',
+              transition: 'all 0.35s ease',
             }}
           />
         ))}
       </div>
-
-      {/* Amber top accent */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0,
-        height: '2px',
-        background: 'linear-gradient(90deg, #D4AF37, transparent)',
-        pointerEvents: 'none',
-      }} />
     </motion.div>
   );
 };
