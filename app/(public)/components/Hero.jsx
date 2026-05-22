@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { THEME } from '@/lib/constants';
 
 const AMBER      = THEME.amber;
@@ -9,47 +9,62 @@ const WARM_WHITE = THEME.warmWhite;
 const DIM        = THEME.secondary;
 const MUTED      = THEME.muted;
 
-/* Each slot cycles through 2 photos only */
-const slots = [
-  [
-    { src: '/assets/gallery/DSC01373.JPG',  pos: 'center 35%' },
-    { src: '/assets/gallery/IMG_4765.JPG',  pos: 'center center' },
-  ],
-  [
-    { src: '/assets/gallery/IMG_3458.JPG',  pos: 'center top' },
-    { src: '/assets/gallery/IMG_4674.JPG',  pos: 'center 30%' },
-  ],
-  [
-    { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
-    { src: '/assets/gallery/IMG_3727.JPG',  pos: 'center top' },
-  ],
+/* 6 photos across 3 columns — 2 per column, scrolling up/down alternately */
+const col1 = [
+  { src: '/assets/gallery/DSC01373.JPG',    pos: 'center 35%'   },
+  { src: '/assets/gallery/IMG_4765.JPG',    pos: 'center center' },
+  { src: '/assets/gallery/DSC01373.JPG',    pos: 'center 35%'   }, // repeat for seamless
+  { src: '/assets/gallery/IMG_4765.JPG',    pos: 'center center' },
+];
+const col2 = [
+  { src: '/assets/gallery/IMG_3458.JPG',    pos: 'center top'   },
+  { src: '/assets/gallery/IMG_4674.JPG',    pos: 'center 30%'   },
+  { src: '/assets/gallery/IMG_3458.JPG',    pos: 'center top'   },
+  { src: '/assets/gallery/IMG_4674.JPG',    pos: 'center 30%'   },
+];
+const col3 = [
+  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
+  { src: '/assets/gallery/IMG_3727.JPG',    pos: 'center top'   },
+  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
+  { src: '/assets/gallery/IMG_3727.JPG',    pos: 'center top'   },
 ];
 
-/* Single photo slot that crossfades between 2 photos */
-const PhotoSlot = ({ photos, interval, style }) => {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => setI(v => (v + 1) % photos.length), interval);
-    return () => clearInterval(t);
-  }, [photos.length, interval]);
+/* imgH + gap must divide evenly into totalH for seamless loop */
+const IMG_H = 190;
+const GAP   = 10;
+const LOOP_H = 2 * (IMG_H + GAP); // 2 unique photos × unit height
 
-  return (
-    <div style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(240,237,230,0.08)', flexShrink: 0, ...style }}>
-      <AnimatePresence mode="wait">
-        <motion.img
-          key={i}
-          src={photos[i].src}
-          alt="FMI session"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: photos[i].pos, display: 'block' }}
-        />
-      </AnimatePresence>
-    </div>
-  );
-};
+const UpColumn = ({ photos, duration }) => (
+  <div style={{ flex: 1, overflow: 'hidden' }}>
+    <motion.div
+      animate={{ y: [0, -LOOP_H] }}
+      transition={{ duration, repeat: Infinity, ease: 'linear' }}
+      style={{ display: 'flex', flexDirection: 'column', gap: `${GAP}px` }}
+    >
+      {photos.map((p, i) => (
+        <div key={i} style={{ flexShrink: 0, height: IMG_H, borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(240,237,230,0.08)' }}>
+          <img src={p.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: p.pos, display: 'block' }} />
+        </div>
+      ))}
+    </motion.div>
+  </div>
+);
+
+const DownColumn = ({ photos, duration }) => (
+  <div style={{ flex: 1, overflow: 'hidden' }}>
+    <motion.div
+      animate={{ y: [-LOOP_H, 0] }}
+      transition={{ duration, repeat: Infinity, ease: 'linear' }}
+      style={{ display: 'flex', flexDirection: 'column', gap: `${GAP}px` }}
+    >
+      {photos.map((p, i) => (
+        <div key={i} style={{ flexShrink: 0, height: IMG_H, borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(240,237,230,0.08)' }}>
+          <img src={p.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: p.pos, display: 'block' }} />
+        </div>
+      ))}
+    </motion.div>
+  </div>
+);
 
 const words = ['Build', 'Skills', 'for', 'the', 'AI Era.'];
 
@@ -68,36 +83,27 @@ const Hero = () => {
   return (
     <section id="hero" style={{ background: '#0B0F1A', overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative' }}>
 
-      {/* Subtle grid bg */}
       <div className="grid-bg" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }} />
-      {/* Amber glow */}
-      <div style={{
-        position: 'absolute', top: '-200px', left: '-150px',
-        width: '700px', height: '700px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(232,160,48,0.09) 0%, transparent 70%)',
-        pointerEvents: 'none', zIndex: 0, filter: 'blur(40px)',
-      }} />
+      <div style={{ position: 'absolute', top: '-200px', left: '-150px', width: '700px', height: '700px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,160,48,0.09) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0, filter: 'blur(40px)' }} />
 
-      {/* ── Two-column block, sits directly under navbar ── */}
+      {/* ── Single fixed-height block: nav height + content ── */}
       <div
         className="hero-block"
         style={{
           position: 'relative', zIndex: 10,
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
+          /* Exactly viewport height — navbar (72px) built into paddingTop */
+          height: '100vh',
           paddingTop: '72px',
-          /* no minHeight — section is only as tall as the text */
+          boxSizing: 'border-box',
         }}
       >
-        {/* ── LEFT: text ── */}
+        {/* ── LEFT: text, vertically centered in remaining space ── */}
         <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          padding: '48px 40px 48px clamp(20px, 5vw, 80px)',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          padding: '0 40px 0 clamp(20px, 5vw, 80px)',
         }}>
-
-          {/* Pill */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} style={{ marginBottom: '22px' }}>
             <span style={{
               display: 'inline-flex', alignItems: 'center',
@@ -108,7 +114,6 @@ const Hero = () => {
             }}>AI Education Platform</span>
           </motion.div>
 
-          {/* H1 */}
           <h1 style={{
             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 800,
             fontSize: 'clamp(38px, 4.5vw, 76px)',
@@ -125,14 +130,12 @@ const Hero = () => {
             ))}
           </h1>
 
-          {/* Subtitle */}
           <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.55 }}
             style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: DIM, maxWidth: '400px', marginBottom: '30px', lineHeight: 1.72 }}
           >
             Join Future Minds Institute, where working professionals and students become AI-ready practitioners through hands-on training with industry leaders from Google, Amazon, Microsoft and beyond.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.65 }}
             style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '36px' }}
           >
@@ -144,7 +147,6 @@ const Hero = () => {
             >Book Team Training</motion.button>
           </motion.div>
 
-          {/* Stats */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.82 }}
             style={{ display: 'flex', gap: '28px', flexWrap: 'wrap' }} className="hero-stats-row"
           >
@@ -157,16 +159,18 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        {/* ── RIGHT: 3 photo slots, contained within text height ── */}
-        <div style={{
-          padding: '48px clamp(16px, 3vw, 36px) 48px 16px',
-          display: 'flex', gap: '10px', alignItems: 'stretch',
-        }}>
-          {slots.map((photos, col) => (
-            <div key={col} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <PhotoSlot photos={photos} interval={4000 + col * 1200} style={{ flex: 1 }} />
-            </div>
-          ))}
+        {/* ── RIGHT: 3 columns alternating up/down, clipped to block height ── */}
+        <div style={{ position: 'relative', overflow: 'hidden', padding: '0 clamp(16px, 3vw, 36px) 0 12px', display: 'flex', alignItems: 'stretch' }}>
+          {/* Top + bottom fades */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '80px', zIndex: 3, background: 'linear-gradient(180deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px', zIndex: 3, background: 'linear-gradient(0deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '20px', zIndex: 3, background: 'linear-gradient(90deg,#0B0F1A,transparent)', pointerEvents: 'none' }} />
+
+          <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+            <UpColumn   photos={col1} duration={12} />
+            <DownColumn photos={col2} duration={15} />
+            <UpColumn   photos={col3} duration={10} />
+          </div>
         </div>
       </div>
 
@@ -186,8 +190,8 @@ const Hero = () => {
 
       <style jsx>{`
         @media (max-width: 900px) {
-          .hero-block { grid-template-columns: 1fr !important; }
-          .hero-block > div:last-child { height: 240px; }
+          .hero-block { grid-template-columns: 1fr !important; height: auto !important; }
+          .hero-block > div:last-child { height: 260px; }
         }
         @media (max-width: 480px) {
           .hero-stats-row { gap: 16px !important; }
