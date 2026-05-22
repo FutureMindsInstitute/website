@@ -5,15 +5,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { THEME } from '@/lib/constants';
 
 const galleryImages = [
+  { src: '/assets/gallery/DSC01373.JPG',                                                              alt: 'FMI session highlights' },
+  { src: '/assets/gallery/DSC01460.JPG',                                                              alt: 'FMI workshop highlights' },
+  { src: '/assets/gallery/IMG_2315.JPG',                                                              alt: 'FMI community' },
+  { src: '/assets/gallery/IMG_2476.JPG',                                                              alt: 'FMI cohort event' },
+  { src: '/assets/gallery/IMG_3423 2.JPG',                                                            alt: 'FMI hands-on training' },
   { src: '/assets/gallery/IMG_3764.JPG',                                                              alt: 'FMI Workshop session' },
   { src: '/assets/gallery/IMG_3743 3.JPG',                                                            alt: 'Students collaborating' },
   { src: '/assets/gallery/IMG_3458.JPG',                                                              alt: 'Hands-on AI training' },
-  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg',                   alt: 'Group learning session' },
+  { src: '/assets/gallery/IMG_2260.JPG',                                                              alt: 'Cohort gathering' },
   { src: '/assets/gallery/IMG_8668.JPG',                                                              alt: 'Industry expert session' },
   { src: '/assets/gallery/IMG_9916.JPG',                                                              alt: 'Student presentations' },
   { src: '/assets/gallery/IMG_0024 (2).jpg',                                                          alt: 'Workshop highlights' },
   { src: '/assets/gallery/IMG_0030 (1).jpg',                                                          alt: 'Project building session' },
-  { src: '/assets/gallery/IMG_2260.JPG',                                                              alt: 'Cohort gathering' },
   { src: '/assets/gallery/IMG_0568.JPG',                                                              alt: 'AI tools workshop' },
   { src: '/assets/gallery/IMG_0586.JPG',                                                              alt: 'Mentorship session' },
   { src: '/assets/gallery/IMG_4657.JPG',                                                              alt: 'Community event' },
@@ -23,12 +27,8 @@ const galleryImages = [
   { src: '/assets/gallery/IMG_4853.JPG',                                                              alt: 'Team building' },
   { src: '/assets/gallery/IMG_4911.JPG',                                                              alt: 'Expert talk' },
   { src: '/assets/gallery/IMG_5308.JPG',                                                              alt: 'Learning session' },
-  { src: '/assets/gallery/IMG_5445.JPG',                                                              alt: 'Group discussion' },
   { src: '/assets/gallery/IMG_6578.JPG',                                                              alt: 'FMI event' },
-  { src: '/assets/gallery/IMG_6844.JPG',                                                              alt: 'Workshop session' },
   { src: '/assets/gallery/IMG_7092.JPG',                                                              alt: 'Student activity' },
-  { src: '/assets/gallery/IMG_7320.JPG',                                                              alt: 'Cohort event' },
-  { src: '/assets/gallery/IMG_7528.JPG',                                                              alt: 'FMI community' },
 ];
 
 // Split into two rows
