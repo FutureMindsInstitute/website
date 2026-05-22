@@ -1,8 +1,105 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { THEME } from '@/lib/constants';
+
+const carouselImages = [
+  '/assets/gallery/DSC01373.JPG',
+  '/assets/gallery/DSC01460.JPG',
+  '/assets/gallery/IMG_3764.JPG',
+  '/assets/gallery/IMG_3743 3.JPG',
+  '/assets/gallery/IMG_3458.JPG',
+  '/assets/gallery/IMG_3727.JPG',
+  '/assets/gallery/IMG_3505.jpg',
+  '/assets/gallery/IMG_2315.JPG',
+];
+
+const HeroCarousel = () => {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent(prev => (prev + 1) % carouselImages.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.7, delay: 0.4 }}
+      style={{
+        position: 'relative',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        border: '1px solid rgba(212,175,55,0.2)',
+        boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
+        aspectRatio: '4/3',
+        width: '100%',
+      }}
+    >
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={current}
+          src={carouselImages[current]}
+          alt="FMI workshop"
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center top',
+            display: 'block',
+          }}
+        />
+      </AnimatePresence>
+
+      {/* Gradient overlay at bottom */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        height: '60px',
+        background: 'linear-gradient(0deg, rgba(11,15,26,0.7) 0%, transparent 100%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Dot indicators */}
+      <div style={{
+        position: 'absolute', bottom: '12px', left: 0, right: 0,
+        display: 'flex', justifyContent: 'center', gap: '6px',
+      }}>
+        {carouselImages.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            style={{
+              width: i === current ? '20px' : '6px',
+              height: '6px',
+              borderRadius: '3px',
+              border: 'none',
+              background: i === current ? '#D4AF37' : 'rgba(240,237,230,0.3)',
+              cursor: 'pointer',
+              padding: 0,
+              transition: 'all 0.3s ease',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Amber top accent */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0,
+        height: '2px',
+        background: 'linear-gradient(90deg, #D4AF37, transparent)',
+        pointerEvents: 'none',
+      }} />
+    </motion.div>
+  );
+};
 
 const AMBER     = THEME.amber;
 const WARM_WHITE = THEME.warmWhite;
@@ -280,117 +377,8 @@ const Hero = () => {
             className="hero-right-panel"
             style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
-            {/* Featured program card */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-              style={{
-                background: SURFACE,
-                border: '1px solid rgba(240,237,230,0.07)',
-                borderRadius: '16px',
-                padding: '24px',
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-            >
-              {/* Amber top accent line */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 0, left: 0, right: 0,
-                  height: '2px',
-                  background: `linear-gradient(90deg, ${AMBER}, transparent)`,
-                }}
-              />
-
-              <div style={{ marginBottom: '8px' }}>
-                <div
-                  style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '9px',
-                    fontWeight: 700,
-                    letterSpacing: '0.16em',
-                    textTransform: 'uppercase',
-                    color: MUTED,
-                    marginBottom: '8px',
-                  }}
-                >
-                  Powered by
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Bricolage Grotesque, sans-serif',
-                    fontWeight: 700,
-                    fontSize: '15px',
-                    color: WARM_WHITE,
-                  }}
-                >
-                  Women in Product India
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Next cohort micro-card */}
-            <motion.div
-              animate={{ y: [0, -3, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-              style={{
-                background: 'rgba(232,160,48,0.06)',
-                border: '1px solid rgba(232,160,48,0.18)',
-                borderRadius: '12px',
-                padding: '16px 20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '12px',
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '9px',
-                    fontWeight: 700,
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'rgba(232,160,48,0.6)',
-                    marginBottom: '4px',
-                  }}
-                >
-                  Next Cohort
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Bricolage Grotesque, sans-serif',
-                    fontWeight: 800,
-                    fontSize: '16px',
-                    color: AMBER,
-                  }}
-                >
-                  Applications Opening Soon
-                </div>
-              </div>
-              <motion.button
-                onClick={() => scrollToSection('courses')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.96 }}
-                style={{
-                  background: AMBER,
-                  color: '#0B0F1A',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '8px 16px',
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Reserve Spot
-              </motion.button>
-            </motion.div>
+            {/* Photo Carousel */}
+            <HeroCarousel />
           </motion.div>
         </div>
       </div>
