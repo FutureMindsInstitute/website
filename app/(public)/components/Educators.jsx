@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 const educators = [
   {
     name: 'Swati Awasthi',
-    title: 'Founder, Women in Product India',
+    title: 'Founder, Women in Product India & Co-Founder, Future Minds Institute',
     image: '/assets/educators/swatiawasthi.jpg',
     bio: 'Swati is the Founder of Women in Product India, building a thriving community with a sharp vision of advancing women in product leadership and entrepreneurship.',
     achievements: [
@@ -21,7 +21,7 @@ const educators = [
   },
   {
     name: 'Amrit Raj',
-    title: 'Co-Founder, Women in Product India',
+    title: 'Co-Founder, Future Minds Institute & Women in Product India',
     image: '/assets/educators/amritraj.jpg',
     bio: 'Amrit Raj has 11+ years in the education sector. Social media strategist, curious learner, AI enthusiast, passionate about skilling students to be future-ready.',
     achievements: [
@@ -72,7 +72,7 @@ const Educators = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55 }}
-          style={{ marginBottom: '64px' }}
+          style={{ marginBottom: '64px', textAlign: 'center' }}
         >
           <div
             style={{
@@ -97,6 +97,7 @@ const Educators = () => {
               color: '#F0EDE6',
               marginBottom: '14px',
               maxWidth: '520px',
+              margin: '0 auto 14px',
             }}
           >
             Meet Your{' '}
@@ -109,6 +110,7 @@ const Educators = () => {
               color: '#6B6B6B',
               maxWidth: '500px',
               lineHeight: 1.65,
+              margin: '0 auto',
             }}
           >
             Learn from industry leaders who have shaped the AI and product landscape
