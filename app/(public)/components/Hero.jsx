@@ -4,164 +4,112 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { THEME } from '@/lib/constants';
 
-/* ── Curated hero photos: clear teaching/student shots only ── */
-const heroPhotos = [
-  { src: '/assets/gallery/DSC01373.JPG',                                            pos: 'center 30%' },
-  { src: '/assets/gallery/IMG_4765.JPG',                                            pos: 'center center' },
-  { src: '/assets/gallery/IMG_2315.JPG',                                            pos: 'center 40%' },
-  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
+/* ── Hero photos: clear training & community shots ── */
+const mainPhotos = [
+  { src: '/assets/gallery/DSC01373.JPG',                                            pos: 'center 35%' },
   { src: '/assets/gallery/IMG_4674.JPG',                                            pos: 'center 30%' },
   { src: '/assets/gallery/IMG_3764.JPG',                                            pos: 'center 40%' },
+  { src: '/assets/gallery/IMG_4765.JPG',                                            pos: 'center center' },
+  { src: '/assets/gallery/IMG_2315.JPG',                                            pos: 'center 40%' },
+];
+const thumbPhotos = [
   { src: '/assets/gallery/IMG_3727.JPG',                                            pos: 'center top' },
   { src: '/assets/gallery/IMG_3458.JPG',                                            pos: 'center top' },
+  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
+  { src: '/assets/gallery/DSC01460.JPG',                                            pos: 'center 30%' },
+  { src: '/assets/gallery/IMG_4575.JPG',                                            pos: 'center 35%' },
 ];
 
 const HeroCarousel = () => {
   const [idx, setIdx] = useState(0);
-  const n = heroPhotos.length;
+  const n = mainPhotos.length;
 
   useEffect(() => {
     const t = setInterval(() => setIdx(i => (i + 1) % n), 4000);
     return () => clearInterval(t);
   }, [n]);
 
-  const cur  = heroPhotos[idx];
-  const next = heroPhotos[(idx + 1) % n];
-  const prev = heroPhotos[(idx - 1 + n) % n];
+  const t1 = thumbPhotos[idx % thumbPhotos.length];
+  const t2 = thumbPhotos[(idx + 2) % thumbPhotos.length];
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 32 }}
+      initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      style={{ position: 'relative', width: '100%', height: '440px' }}
+      transition={{ duration: 0.75, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}
     >
-      {/* ── Ambient glow behind cards ── */}
+      {/* ── Main photo ── */}
       <div style={{
-        position: 'absolute', top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '80%', height: '60%',
-        background: 'radial-gradient(ellipse, rgba(212,175,55,0.12) 0%, transparent 70%)',
-        filter: 'blur(30px)',
-        pointerEvents: 'none', zIndex: 0,
-      }} />
-
-      {/* ── Card A: top-right, tilted ── */}
-      <motion.div
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        style={{
-          position: 'absolute',
-          top: 0, right: 0,
-          width: '62%', height: '58%',
-          borderRadius: '16px', overflow: 'hidden',
-          transform: 'rotate(3deg)',
-          zIndex: 1,
-          boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
-          border: '1px solid rgba(240,237,230,0.1)',
-        }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={`a-${idx}`}
-            src={heroPhotos[(idx + 2) % n].src}
-            alt=""
-            initial={{ opacity: 0, scale: 1.07 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7 }}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: heroPhotos[(idx + 2) % n].pos, display: 'block' }}
-          />
-        </AnimatePresence>
-        {/* Subtle dark tint */}
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(11,15,26,0.18)' }} />
-      </motion.div>
-
-      {/* ── Card B: bottom-left, tilted opposite ── */}
-      <motion.div
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-        style={{
-          position: 'absolute',
-          bottom: 0, left: 0,
-          width: '55%', height: '50%',
-          borderRadius: '14px', overflow: 'hidden',
-          transform: 'rotate(-4deg)',
-          zIndex: 1,
-          boxShadow: '0 16px 40px rgba(0,0,0,0.55)',
-          border: '1px solid rgba(240,237,230,0.08)',
-        }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={`b-${idx}`}
-            src={prev.src}
-            alt=""
-            initial={{ opacity: 0, scale: 1.07 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: prev.pos, display: 'block' }}
-          />
-        </AnimatePresence>
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(11,15,26,0.22)' }} />
-      </motion.div>
-
-      {/* ── Main card: front, center, slight tilt ── */}
-      <motion.div
-        animate={{ y: [0, -5, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 0.7 }}
-        style={{
-          position: 'absolute',
-          top: '12%', left: '14%',
-          width: '75%', height: '72%',
-          borderRadius: '18px', overflow: 'hidden',
-          transform: 'rotate(-1.5deg)',
-          zIndex: 2,
-          boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,175,55,0.25)',
-        }}
-      >
+        position: 'relative', width: '100%', height: '290px',
+        borderRadius: '16px', overflow: 'hidden',
+        boxShadow: '0 24px 64px rgba(0,0,0,0.55)',
+        border: '1px solid rgba(212,175,55,0.2)',
+      }}>
         <AnimatePresence mode="wait">
           <motion.img
             key={`main-${idx}`}
-            src={cur.src}
+            src={mainPhotos[idx].src}
             alt="FMI training session"
-            initial={{ opacity: 0, scale: 1.06 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: cur.pos, display: 'block' }}
-          />
-        </AnimatePresence>
-        {/* Very subtle vignette only */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse at center, transparent 55%, rgba(11,15,26,0.45) 100%)',
-          pointerEvents: 'none',
-        }} />
-        {/* Gold top-left accent line */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, width: '40%', height: '2px',
-          background: 'linear-gradient(90deg, #D4AF37, transparent)',
-        }} />
-      </motion.div>
-
-      {/* ── Dot strip bottom-right ── */}
-      <div style={{
-        position: 'absolute', bottom: '16px', right: '16px',
-        display: 'flex', gap: '5px', zIndex: 5,
-      }}>
-        {heroPhotos.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIdx(i)}
+            transition={{ duration: 0.6, ease: 'easeInOut' }}
             style={{
-              width: i === idx ? '20px' : '5px', height: '5px',
-              borderRadius: '3px', border: 'none', padding: 0,
-              background: i === idx ? '#D4AF37' : 'rgba(240,237,230,0.25)',
-              cursor: 'pointer', transition: 'all 0.35s ease',
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover', objectPosition: mainPhotos[idx].pos,
+              display: 'block',
             }}
           />
+        </AnimatePresence>
+        {/* Thin gold line top */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: '2px', zIndex: 2,
+          background: 'linear-gradient(90deg, #D4AF37 0%, rgba(212,175,55,0.3) 60%, transparent 100%)',
+        }} />
+        {/* Dot indicators inside bottom */}
+        <div style={{
+          position: 'absolute', bottom: '14px', left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', gap: '5px', zIndex: 3,
+        }}>
+          {mainPhotos.map((_, i) => (
+            <button key={i} onClick={() => setIdx(i)} style={{
+              width: i === idx ? '20px' : '5px', height: '5px',
+              borderRadius: '3px', border: 'none', padding: 0,
+              background: i === idx ? '#D4AF37' : 'rgba(240,237,230,0.35)',
+              cursor: 'pointer', transition: 'all 0.35s ease',
+            }} />
+          ))}
+        </div>
+      </div>
+
+      {/* ── Two thumbnail photos side by side ── */}
+      <div style={{ display: 'flex', gap: '10px' }}>
+        {[t1, t2].map((photo, i) => (
+          <div key={i} style={{
+            flex: 1, height: '145px',
+            borderRadius: '12px', overflow: 'hidden',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.45)',
+            border: '1px solid rgba(240,237,230,0.07)',
+          }}>
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={`t${i}-${idx}`}
+                src={photo.src}
+                alt="FMI session"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.55, delay: i * 0.1 }}
+                style={{
+                  width: '100%', height: '100%',
+                  objectFit: 'cover', objectPosition: photo.pos,
+                  display: 'block',
+                }}
+              />
+            </AnimatePresence>
+          </div>
         ))}
       </div>
     </motion.div>
@@ -436,8 +384,8 @@ const Hero = () => {
             </motion.div>
           </div>
 
-          {/* RIGHT — floating collage */}
-          <div className="hero-right-panel">
+          {/* RIGHT */}
+          <div className="hero-right-panel" style={{ alignSelf: 'center' }}>
             <HeroCarousel />
           </div>
         </div>
