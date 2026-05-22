@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { THEME } from '@/lib/constants';
 
 const AMBER      = THEME.amber;
@@ -9,29 +9,74 @@ const WARM_WHITE = THEME.warmWhite;
 const DIM        = THEME.secondary;
 const MUTED      = THEME.muted;
 
-/* ── Photos: only clear teaching + audience shots ── */
-const photos = [
+/* ── 3 columns of photos, each scrolling at a different speed ── */
+const col1 = [
   { src: '/assets/gallery/DSC01373.JPG',                                            pos: 'center 30%' },
-  { src: '/assets/gallery/IMG_4674.JPG',                                            pos: 'center 30%' },
   { src: '/assets/gallery/IMG_4765.JPG',                                            pos: 'center center' },
-  { src: '/assets/gallery/IMG_3764.JPG',                                            pos: 'center 40%' },
+  { src: '/assets/gallery/IMG_3727.JPG',                                            pos: 'center top' },
   { src: '/assets/gallery/IMG_2315.JPG',                                            pos: 'center 38%' },
-  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
-  { src: '/assets/gallery/IMG_3727.JPG',                                            pos: 'center top'  },
-  { src: '/assets/gallery/IMG_3458.JPG',                                            pos: 'center top'  },
+  { src: '/assets/gallery/IMG_4674.JPG',                                            pos: 'center 30%' },
 ];
+const col2 = [
+  { src: '/assets/gallery/IMG_3764.JPG',                                            pos: 'center 40%' },
+  { src: '/assets/gallery/IMG_3458.JPG',                                            pos: 'center top' },
+  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
+  { src: '/assets/gallery/IMG_3743 3.JPG',                                          pos: 'center center' },
+  { src: '/assets/gallery/DSC01460.JPG',                                            pos: 'center 30%' },
+];
+const col3 = [
+  { src: '/assets/gallery/IMG_4575.JPG',                                            pos: 'center 35%' },
+  { src: '/assets/gallery/IMG_2476.JPG',                                            pos: 'center center' },
+  { src: '/assets/gallery/IMG_2260.JPG',                                            pos: 'center center' },
+  { src: '/assets/gallery/e81d4bc9-751b-40cc-86d5-c513b3fbc65b-copied-media~2.jpg',pos: 'center center' },
+  { src: '/assets/gallery/BD013A83-54ED-4A33-ACE2-9283DE0D9037_4_5005_c (1).jpeg', pos: 'center 30%' },
+];
+
+const ScrollColumn = ({ photos, duration, startY = 0 }) => {
+  /* duplicate so loop is seamless */
+  const doubled = [...photos, ...photos];
+  const imgH = 200;
+  const gap  = 10;
+  const totalH = photos.length * (imgH + gap);
+
+  return (
+    <div style={{ overflow: 'hidden', flex: 1 }}>
+      <motion.div
+        animate={{ y: [startY, startY - totalH] }}
+        transition={{ duration, repeat: Infinity, ease: 'linear', repeatType: 'loop' }}
+        style={{ display: 'flex', flexDirection: 'column', gap: `${gap}px` }}
+      >
+        {doubled.map((photo, i) => (
+          <div
+            key={i}
+            style={{
+              flexShrink: 0,
+              height: `${imgH}px`,
+              borderRadius: '10px',
+              overflow: 'hidden',
+              border: '1px solid rgba(240,237,230,0.07)',
+            }}
+          >
+            <img
+              src={photo.src}
+              alt="FMI session"
+              style={{
+                width: '100%', height: '100%',
+                objectFit: 'cover',
+                objectPosition: photo.pos,
+                display: 'block',
+              }}
+            />
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
 
 const words = ['Build', 'Skills', 'for', 'the', 'AI Era.'];
 
 const Hero = () => {
-  const [idx, setIdx] = useState(0);
-  const n = photos.length;
-
-  useEffect(() => {
-    const t = setInterval(() => setIdx(i => (i + 1) % n), 4500);
-    return () => clearInterval(t);
-  }, [n]);
-
   const scrollToSection = id => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   const stats = [
@@ -55,71 +100,10 @@ const Hero = () => {
         flexDirection: 'column',
       }}
     >
-      {/* ── Full-bleed photo panel (right half, absolute) ── */}
-      <div
-        className="hero-photo-panel"
-        style={{
-          position: 'absolute',
-          top: 0, right: 0, bottom: 0,
-          width: '48%',
-          zIndex: 1,
-        }}
-      >
-        {/* Crossfading photos */}
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={idx}
-            src={photos[idx].src}
-            alt="FMI training session"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.9, ease: 'easeInOut' }}
-            style={{
-              position: 'absolute', inset: 0,
-              width: '100%', height: '100%',
-              objectFit: 'cover',
-              objectPosition: photos[idx].pos,
-              display: 'block',
-            }}
-          />
-        </AnimatePresence>
-
-        {/* Left-side fade so photo blends into dark background */}
-        <div style={{
-          position: 'absolute', inset: 0, zIndex: 2,
-          background: 'linear-gradient(90deg, #0B0F1A 0%, rgba(11,15,26,0.3) 30%, transparent 60%)',
-        }} />
-        {/* Bottom fade */}
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: '180px', zIndex: 2,
-          background: 'linear-gradient(0deg, #0B0F1A 0%, transparent 100%)',
-        }} />
-
-        {/* Dots — bottom center of panel */}
-        <div style={{
-          position: 'absolute', bottom: '72px', left: 0, right: 0,
-          display: 'flex', justifyContent: 'center', gap: '6px', zIndex: 4,
-        }}>
-          {photos.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIdx(i)}
-              style={{
-                width: i === idx ? '22px' : '6px', height: '6px',
-                borderRadius: '3px', border: 'none', padding: 0,
-                background: i === idx ? '#D4AF37' : 'rgba(240,237,230,0.3)',
-                cursor: 'pointer', transition: 'all 0.35s ease',
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* ── Grid background (left side only) ── */}
+      {/* Grid bg */}
       <div className="grid-bg" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }} />
 
-      {/* ── Ambient glow top-left ── */}
+      {/* Glow top-left */}
       <div style={{
         position: 'absolute', top: '-180px', left: '-120px',
         width: '700px', height: '700px', borderRadius: '50%',
@@ -127,17 +111,19 @@ const Hero = () => {
         pointerEvents: 'none', zIndex: 0, filter: 'blur(40px)',
       }} />
 
-      {/* ── Text content (left column) ── */}
+      {/* ── Main layout ── */}
       <div style={{
-        position: 'relative', zIndex: 10,
-        flex: 1, display: 'flex', alignItems: 'center',
-        paddingTop: '120px', paddingBottom: '60px',
-        paddingLeft: 'max(24px, calc((100vw - 1200px) / 2))',
-        paddingRight: 'max(24px, calc((100vw - 1200px) / 2))',
-      }}>
-        {/* Only use left 52% so text never overlaps photo */}
-        <div style={{ width: '52%', maxWidth: '580px' }} className="hero-text-col">
+        position: 'relative', zIndex: 10, flex: 1,
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        minHeight: 'calc(100vh - 49px)',
+      }} className="hero-main-grid">
 
+        {/* ── LEFT: Text ── */}
+        <div style={{
+          display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          padding: 'clamp(100px, 12vh, 140px) clamp(24px, 5vw, 72px) 60px max(24px, calc((100vw - 1200px) / 2))',
+        }}>
           {/* Pill */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
@@ -146,7 +132,7 @@ const Hero = () => {
             style={{ marginBottom: '28px' }}
           >
             <span style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              display: 'inline-flex', alignItems: 'center',
               padding: '6px 16px', borderRadius: '100px',
               border: '1px solid rgba(232,160,48,0.25)',
               background: 'rgba(232,160,48,0.08)',
@@ -162,11 +148,9 @@ const Hero = () => {
           <h1 style={{
             fontFamily: 'Bricolage Grotesque, sans-serif',
             fontWeight: 800,
-            fontSize: 'clamp(44px, 6vw, 86px)',
-            lineHeight: 0.95,
-            letterSpacing: '-0.04em',
-            color: WARM_WHITE,
-            marginBottom: '24px',
+            fontSize: 'clamp(44px, 5.5vw, 84px)',
+            lineHeight: 0.95, letterSpacing: '-0.04em',
+            color: WARM_WHITE, marginBottom: '22px',
             display: 'flex', flexWrap: 'wrap',
             gap: '0.2em', alignItems: 'baseline',
           }}>
@@ -190,7 +174,7 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.58 }}
             style={{
               fontFamily: 'Inter, sans-serif', fontSize: '16px',
-              color: DIM, maxWidth: '480px',
+              color: DIM, maxWidth: '440px',
               marginBottom: '36px', lineHeight: 1.72,
             }}
           >
@@ -262,12 +246,52 @@ const Hero = () => {
             ))}
           </motion.div>
         </div>
+
+        {/* ── RIGHT: Scrolling photo columns ── */}
+        <div style={{
+          position: 'relative',
+          overflow: 'hidden',
+          paddingTop: '80px',
+          paddingBottom: '49px',
+          paddingRight: 'clamp(16px, 3vw, 40px)',
+          paddingLeft: '24px',
+        }}>
+          {/* Top + bottom fade masks */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: '120px', zIndex: 3,
+            background: 'linear-gradient(180deg, #0B0F1A 0%, transparent 100%)',
+            pointerEvents: 'none',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: '120px', zIndex: 3,
+            background: 'linear-gradient(0deg, #0B0F1A 0%, transparent 100%)',
+            pointerEvents: 'none',
+          }} />
+          {/* Left fade so columns blend into text side */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0, bottom: 0, width: '40px', zIndex: 3,
+            background: 'linear-gradient(90deg, #0B0F1A, transparent)',
+            pointerEvents: 'none',
+          }} />
+
+          {/* 3 columns at different speeds */}
+          <div style={{
+            display: 'flex', gap: '10px', height: '100%',
+          }}>
+            {/* Col 1 – slowest, starts from 0 */}
+            <ScrollColumn photos={col1} duration={22} startY={0} />
+            {/* Col 2 – medium, starts offset so not all same */}
+            <ScrollColumn photos={col2} duration={18} startY={-110} />
+            {/* Col 3 – fastest, offset down */}
+            <ScrollColumn photos={col3} duration={25} startY={-60} />
+          </div>
+        </div>
       </div>
 
-      {/* ── Divider ── */}
+      {/* Divider */}
       <div style={{ position: 'relative', zIndex: 10, height: '1px', background: 'rgba(240,237,230,0.07)' }} />
 
-      {/* ── Marquee ── */}
+      {/* Marquee */}
       <div style={{ position: 'relative', zIndex: 10, overflow: 'hidden', padding: '16px 0', background: '#0B0F1A' }}>
         <div style={{
           position: 'absolute', left: 0, top: 0, bottom: 0, width: '80px',
@@ -291,18 +315,12 @@ const Hero = () => {
 
       <style jsx>{`
         @media (max-width: 900px) {
-          .hero-photo-panel {
-            position: relative !important;
-            width: 100% !important;
-            height: 280px !important;
-            order: -1;
+          .hero-main-grid {
+            grid-template-columns: 1fr !important;
           }
-          .hero-photo-panel > div:first-of-type {
-            background: linear-gradient(0deg, #0B0F1A 0%, transparent 40%) !important;
-          }
-          .hero-text-col {
-            width: 100% !important;
-            max-width: 100% !important;
+          .hero-main-grid > div:last-child {
+            height: 260px;
+            padding-top: 0 !important;
           }
         }
         @media (max-width: 480px) {
