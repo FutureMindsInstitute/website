@@ -87,9 +87,8 @@ const Hero = () => {
           position: 'relative', zIndex: 10,
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          /* navbar is ~72px; pad both columns equally from top */
           paddingTop: '72px',
-          minHeight: '100vh',
+          /* no minHeight — section is only as tall as the text */
         }}
       >
         {/* ── LEFT: text ── */}
@@ -160,8 +159,8 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        {/* ── RIGHT: scrolling columns, same paddingTop so same start ── */}
-        <div style={{ position: 'relative', overflow: 'hidden', padding: '0 clamp(16px, 3vw, 36px) 0 12px' }}>
+        {/* ── RIGHT: scrolling columns, fixed height matching text ── */}
+        <div style={{ position: 'relative', overflow: 'hidden', padding: '48px clamp(16px, 3vw, 36px) 48px 12px', height: '100%' }}>
           {/* Top fade — matches text paddingTop so photos fade in at same level */}
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '48px', zIndex: 3, background: 'linear-gradient(180deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
           {/* Bottom fade */}
