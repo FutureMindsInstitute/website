@@ -277,6 +277,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: 28, y: 8 }}
             animate={{ opacity: 1, x: 0, y: 0 }}
             transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="hero-right-panel"
             style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
             {/* Featured program card */}

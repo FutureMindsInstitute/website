@@ -21,7 +21,7 @@ const educators = [
   },
   {
     name: 'Amrit Raj',
-    title: 'Co-Founder, Future Minds Institute & Women in Product India',
+    title: 'Founder, Future Minds Institute & Co-Founder, Women in Product India',
     image: '/assets/educators/amritraj.jpg',
     bio: 'Amrit Raj has 11+ years in the education sector. Social media strategist, curious learner, AI enthusiast, passionate about skilling students to be future-ready.',
     achievements: [
