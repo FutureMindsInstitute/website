@@ -278,7 +278,7 @@ const BentoFeatures = () => {
 
         {/* Bento grid */}
         <div
-          style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gridTemplateRows: 'auto auto', gap: '16px' }}
+          style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}
           className="bento-grid"
         >
           {/* Card 1 — Big Tech Expertise */}
@@ -291,18 +291,6 @@ const BentoFeatures = () => {
               barDelay={0.1}
             />
             <NetworkCard />
-          </BentoCard>
-
-          {/* Card 2 — Live Sessions */}
-          <BentoCard delay={0.1}>
-            <CardHead
-              tag="Format"
-              title="Live Sessions"
-              desc="8-10 hour intensive formats designed for real outcomes, not passive viewing."
-              bars={3}
-              barDelay={0.18}
-            />
-            <LiveCard />
           </BentoCard>
 
           {/* Card 3 — Industry-First + Portfolio (two-col inner) */}
@@ -334,7 +322,7 @@ const BentoFeatures = () => {
           </BentoCard>
 
           {/* Card 4 — WIP Network */}
-          <BentoCard delay={0.26} style={{ gridColumn: '2 / 3', gridRow: '2 / 3' }}>
+          <BentoCard delay={0.26} style={{ gridColumn: '2 / 3', gridRow: '1 / 3' }}>
             <CardHead
               tag="Community"
               title="WIP India Network"

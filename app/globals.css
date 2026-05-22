@@ -285,3 +285,85 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   color: #D4AF37;
 }
+
+/* ============ MOBILE RESPONSIVE HELPERS ============ */
+@media (max-width: 768px) {
+  /* Reduce section vertical padding on mobile */
+  section {
+    padding-top: 64px !important;
+    padding-bottom: 64px !important;
+  }
+
+  /* Hero — hide the right floating panel on small screens */
+  .hero-right-panel {
+    display: none !important;
+  }
+
+  /* Hero grid: single column */
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  /* Hero headline smaller floor */
+  h1 {
+    font-size: clamp(40px, 11vw, 72px) !important;
+  }
+
+  /* Hero CTA buttons full-width on very small */
+  .hero-cta-row {
+    flex-direction: column !important;
+  }
+  .hero-cta-row button {
+    width: 100% !important;
+  }
+
+  /* Bento grid — single column */
+  .bento-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bento-grid > * {
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+
+  /* Educator cards — single column */
+  .educators-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .edu-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Gallery grid — simpler stacked on mobile */
+  .gallery-row-a {
+    grid-template-columns: 1fr !important;
+  }
+  .gallery-row-b {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .gallery-row-c {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Footer, about, and other grids */
+  .about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .edu-stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gallery-row-b,
+  .gallery-row-c {
+    grid-template-columns: 1fr !important;
+  }
+}
