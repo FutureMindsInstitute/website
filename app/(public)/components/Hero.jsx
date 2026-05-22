@@ -4,37 +4,78 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { THEME } from '@/lib/constants';
 
-const carouselImages = [
+/* ── Hero Collage: 3 panels cycling independently ── */
+const topPhotos = [
   '/assets/gallery/DSC01373.JPG',
-  '/assets/gallery/DSC01460.JPG',
-  '/assets/gallery/IMG_3764.JPG',
-  '/assets/gallery/IMG_3743 3.JPG',
+  '/assets/gallery/IMG_4765.JPG',
+  '/assets/gallery/IMG_2315.JPG',
+  '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg',
+  '/assets/gallery/IMG_4575.JPG',
+];
+const blPhotos = [
   '/assets/gallery/IMG_3458.JPG',
   '/assets/gallery/IMG_3727.JPG',
-  '/assets/gallery/IMG_3505.jpg',
-  '/assets/gallery/IMG_2315.JPG',
+  '/assets/gallery/DSC01460.JPG',
+];
+const brPhotos = [
+  '/assets/gallery/IMG_4674.JPG',
+  '/assets/gallery/IMG_3764.JPG',
+  '/assets/gallery/e81d4bc9-751b-40cc-86d5-c513b3fbc65b-copied-media~2.jpg',
 ];
 
+const CollagePanel = ({ photos, idx, pos = 'center center', radius = '12px', children, style = {} }) => (
+  <div style={{ position: 'relative', overflow: 'hidden', borderRadius: radius, ...style }}>
+    <AnimatePresence mode="wait">
+      <motion.img
+        key={idx}
+        src={photos[idx]}
+        alt="FMI training session"
+        initial={{ opacity: 0, scale: 1.06 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          position: 'absolute', inset: 0,
+          width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: pos,
+          display: 'block',
+        }}
+      />
+    </AnimatePresence>
+    {children}
+  </div>
+);
+
 const HeroCarousel = () => {
-  const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const total = carouselImages.length;
+  const [topIdx, setTopIdx]   = useState(0);
+  const [blIdx,  setBlIdx]    = useState(0);
+  const [brIdx,  setBrIdx]    = useState(1);
 
+  // Top panel: every 4.2s
   useEffect(() => {
-    const timer = setInterval(() => {
-      setDirection(1);
-      setCurrent(prev => (prev + 1) % total);
-    }, 3500);
-    return () => clearInterval(timer);
-  }, [total]);
+    const t = setInterval(() => setTopIdx(i => (i + 1) % topPhotos.length), 4200);
+    return () => clearInterval(t);
+  }, []);
 
-  const go = (idx) => {
-    setDirection(idx > current ? 1 : -1);
-    setCurrent(idx);
-  };
+  // Bottom-left: offset 1.5s, every 5s
+  useEffect(() => {
+    let iid;
+    const tid = setTimeout(() => {
+      iid = setInterval(() => setBlIdx(i => (i + 1) % blPhotos.length), 5000);
+    }, 1500);
+    return () => { clearTimeout(tid); clearInterval(iid); };
+  }, []);
 
-  const prev = (current - 1 + total) % total;
-  const next = (current + 1) % total;
+  // Bottom-right: offset 3s, every 5.5s
+  useEffect(() => {
+    let iid;
+    const tid = setTimeout(() => {
+      iid = setInterval(() => setBrIdx(i => (i + 1) % brPhotos.length), 5500);
+    }, 3000);
+    return () => { clearTimeout(tid); clearInterval(iid); };
+  }, []);
+
+  const goTop = (dir) => setTopIdx(i => (i + dir + topPhotos.length) % topPhotos.length);
 
   return (
     <motion.div
@@ -43,118 +84,186 @@ const HeroCarousel = () => {
       transition={{ duration: 0.7, delay: 0.4 }}
       style={{ position: 'relative', width: '100%' }}
     >
-      {/* Stacked cards container */}
-      <div style={{ position: 'relative', height: '320px' }}>
-
-        {/* Card behind (next) */}
+      {/* ── Outer frame with gold corner brackets ── */}
+      <div style={{
+        position: 'relative',
+        borderRadius: '16px',
+        padding: '2px',
+        background: 'linear-gradient(135deg, rgba(212,175,55,0.35) 0%, rgba(212,175,55,0.05) 50%, rgba(212,175,55,0.25) 100%)',
+        boxShadow: '0 0 60px rgba(212,175,55,0.08), 0 24px 64px rgba(0,0,0,0.55)',
+      }}>
         <div style={{
-          position: 'absolute',
-          top: '16px', left: '16px', right: '-16px',
-          height: '100%',
-          borderRadius: '16px',
+          borderRadius: '14px',
           overflow: 'hidden',
-          opacity: 0.35,
-          transform: 'scale(0.94)',
-          border: '1px solid rgba(212,175,55,0.1)',
+          background: '#0B0F1A',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '3px',
         }}>
-          <img src={carouselImages[next]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
-        </div>
 
-        {/* Main active card */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            initial={{ opacity: 0, x: direction * 60, scale: 0.96 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -direction * 40, scale: 0.97 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: '16px',
-              overflow: 'hidden',
-              border: '1px solid rgba(212,175,55,0.3)',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,175,55,0.08)',
-            }}
+          {/* ── Top panel (wide landscape) ── */}
+          <CollagePanel
+            photos={topPhotos}
+            idx={topIdx}
+            pos="center center"
+            radius="0"
+            style={{ height: '256px' }}
           >
-            <img
-              src={carouselImages[current]}
-              alt="FMI session"
-              style={{
-                width: '100%', height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center top',
-                display: 'block',
-              }}
-            />
+            {/* "LIVE SESSION" badge */}
+            <div style={{
+              position: 'absolute', top: '12px', left: '12px', zIndex: 5,
+              display: 'flex', alignItems: 'center', gap: '6px',
+              background: 'rgba(11,15,26,0.75)', backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(212,175,55,0.45)', borderRadius: '6px',
+              padding: '5px 10px',
+            }}>
+              {/* Pulse dot */}
+              <span style={{
+                width: '6px', height: '6px', borderRadius: '50%',
+                background: '#D4AF37', display: 'inline-block',
+                animation: 'pulse-dot 1.8s ease-in-out infinite',
+              }} />
+              <span style={{
+                fontFamily: 'Inter, sans-serif', fontSize: '9px', fontWeight: 700,
+                letterSpacing: '0.14em', color: '#D4AF37', textTransform: 'uppercase',
+              }}>Live Session</span>
+            </div>
+
+            {/* Photo counter */}
+            <div style={{
+              position: 'absolute', bottom: '12px', right: '14px', zIndex: 5,
+              fontFamily: 'Inter, sans-serif', fontSize: '10px', fontWeight: 700,
+              color: 'rgba(212,175,55,0.8)', letterSpacing: '0.1em',
+            }}>
+              {String(topIdx + 1).padStart(2, '0')} / {String(topPhotos.length).padStart(2, '0')}
+            </div>
+
             {/* Bottom gradient */}
             <div style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0,
-              height: '80px',
-              background: 'linear-gradient(0deg, rgba(11,15,26,0.8) 0%, transparent 100%)',
+              position: 'absolute', bottom: 0, left: 0, right: 0, height: '70px', zIndex: 4,
+              background: 'linear-gradient(0deg, rgba(11,15,26,0.75) 0%, transparent 100%)',
             }} />
-            {/* Gold top bar */}
-            <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
-              background: 'linear-gradient(90deg, #D4AF37 0%, rgba(212,175,55,0.3) 60%, transparent 100%)',
-            }} />
-            {/* Counter */}
-            <div style={{
-              position: 'absolute', bottom: '14px', right: '16px',
-              fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 700,
-              color: 'rgba(212,175,55,0.7)', letterSpacing: '0.08em',
-            }}>
-              {String(current + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
-            </div>
-          </motion.div>
-        </AnimatePresence>
 
-        {/* Prev / Next arrows */}
-        <button
-          onClick={() => go(prev)}
-          style={{
-            position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)',
-            zIndex: 20, width: '32px', height: '32px', borderRadius: '50%',
-            background: 'rgba(11,15,26,0.7)', border: '1px solid rgba(212,175,55,0.3)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', color: '#D4AF37',
-          }}
-        >
-          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
-        <button
-          onClick={() => go(next)}
-          style={{
-            position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
-            zIndex: 20, width: '32px', height: '32px', borderRadius: '50%',
-            background: 'rgba(11,15,26,0.7)', border: '1px solid rgba(212,175,55,0.3)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', color: '#D4AF37',
-          }}
-        >
-          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
+            {/* Gold progress bar */}
+            <motion.div
+              key={`prog-${topIdx}`}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 4.2, ease: 'linear' }}
+              style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px',
+                background: '#D4AF37', transformOrigin: 'left', zIndex: 6,
+              }}
+            />
+
+            {/* Prev / Next arrows */}
+            <button
+              onClick={() => goTop(-1)}
+              style={{
+                position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)',
+                zIndex: 10, width: '30px', height: '30px', borderRadius: '50%',
+                background: 'rgba(11,15,26,0.7)', border: '1px solid rgba(212,175,55,0.4)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', color: '#D4AF37',
+              }}
+            >
+              <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button
+              onClick={() => goTop(1)}
+              style={{
+                position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)',
+                zIndex: 10, width: '30px', height: '30px', borderRadius: '50%',
+                background: 'rgba(11,15,26,0.7)', border: '1px solid rgba(212,175,55,0.4)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', color: '#D4AF37',
+              }}
+            >
+              <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </CollagePanel>
+
+          {/* ── Bottom row: two square panels ── */}
+          <div style={{ display: 'flex', gap: '3px' }}>
+            {/* Bottom-left */}
+            <CollagePanel
+              photos={blPhotos}
+              idx={blIdx}
+              pos="center top"
+              radius="0"
+              style={{ flex: 1, height: '160px' }}
+            >
+              <div style={{
+                position: 'absolute', bottom: '8px', left: '10px', zIndex: 5,
+                fontFamily: 'Inter, sans-serif', fontSize: '9px', fontWeight: 600,
+                letterSpacing: '0.1em', color: 'rgba(212,175,55,0.75)', textTransform: 'uppercase',
+              }}>Hands-on Training</div>
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: '50px', zIndex: 4,
+                background: 'linear-gradient(0deg, rgba(11,15,26,0.7) 0%, transparent 100%)',
+              }} />
+            </CollagePanel>
+
+            {/* Bottom-right */}
+            <CollagePanel
+              photos={brPhotos}
+              idx={brIdx}
+              pos="center center"
+              radius="0"
+              style={{ flex: 1, height: '160px' }}
+            >
+              <div style={{
+                position: 'absolute', bottom: '8px', left: '10px', zIndex: 5,
+                fontFamily: 'Inter, sans-serif', fontSize: '9px', fontWeight: 600,
+                letterSpacing: '0.1em', color: 'rgba(212,175,55,0.75)', textTransform: 'uppercase',
+              }}>Our Community</div>
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: '50px', zIndex: 4,
+                background: 'linear-gradient(0deg, rgba(11,15,26,0.7) 0%, transparent 100%)',
+              }} />
+            </CollagePanel>
+          </div>
+
+        </div>
+
+        {/* Gold corner brackets */}
+        {[
+          { top: '-1px', left: '-1px', borderTop: '2px solid #D4AF37', borderLeft: '2px solid #D4AF37', borderRadius: '14px 0 0 0' },
+          { top: '-1px', right: '-1px', borderTop: '2px solid #D4AF37', borderRight: '2px solid #D4AF37', borderRadius: '0 14px 0 0' },
+          { bottom: '-1px', left: '-1px', borderBottom: '2px solid #D4AF37', borderLeft: '2px solid #D4AF37', borderRadius: '0 0 0 14px' },
+          { bottom: '-1px', right: '-1px', borderBottom: '2px solid #D4AF37', borderRight: '2px solid #D4AF37', borderRadius: '0 0 14px 0' },
+        ].map((s, i) => (
+          <div key={i} style={{ position: 'absolute', width: '22px', height: '22px', ...s, zIndex: 10 }} />
+        ))}
       </div>
 
       {/* Dot indicators */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '16px' }}>
-        {carouselImages.map((_, i) => (
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '14px' }}>
+        {topPhotos.map((_, i) => (
           <button
             key={i}
-            onClick={() => go(i)}
+            onClick={() => setTopIdx(i)}
             style={{
-              width: i === current ? '24px' : '6px',
-              height: '6px',
-              borderRadius: '3px',
-              border: 'none',
-              background: i === current ? '#D4AF37' : 'rgba(240,237,230,0.2)',
-              cursor: 'pointer',
-              padding: 0,
+              width: i === topIdx ? '22px' : '6px', height: '6px',
+              borderRadius: '3px', border: 'none',
+              background: i === topIdx ? '#D4AF37' : 'rgba(240,237,230,0.2)',
+              cursor: 'pointer', padding: 0,
               transition: 'all 0.35s ease',
             }}
           />
         ))}
       </div>
+
+      <style jsx>{`
+        @keyframes pulse-dot {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(0.7); }
+        }
+      `}</style>
     </motion.div>
   );
 };
