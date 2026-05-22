@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { THEME } from '@/lib/constants';
 
 const AMBER      = THEME.amber;
@@ -9,46 +9,44 @@ const WARM_WHITE = THEME.warmWhite;
 const DIM        = THEME.secondary;
 const MUTED      = THEME.muted;
 
-/* 6 clean training photos only */
-const col1 = [
-  { src: '/assets/gallery/DSC01373.JPG',                                            pos: 'center 35%' },
-  { src: '/assets/gallery/IMG_4765.JPG',                                            pos: 'center center' },
-];
-const col2 = [
-  { src: '/assets/gallery/IMG_3458.JPG',                                            pos: 'center top' },
-  { src: '/assets/gallery/IMG_4674.JPG',                                            pos: 'center 30%' },
-];
-const col3 = [
-  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
-  { src: '/assets/gallery/IMG_3727.JPG',                                            pos: 'center top' },
+/* Each slot cycles through 2 photos only */
+const slots = [
+  [
+    { src: '/assets/gallery/DSC01373.JPG',  pos: 'center 35%' },
+    { src: '/assets/gallery/IMG_4765.JPG',  pos: 'center center' },
+  ],
+  [
+    { src: '/assets/gallery/IMG_3458.JPG',  pos: 'center top' },
+    { src: '/assets/gallery/IMG_4674.JPG',  pos: 'center 30%' },
+  ],
+  [
+    { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
+    { src: '/assets/gallery/IMG_3727.JPG',  pos: 'center top' },
+  ],
 ];
 
-const ScrollColumn = ({ photos, duration, initialY = 0 }) => {
-  const repeated = [...photos, ...photos, ...photos, ...photos];
-  const imgH = 220;
-  const gap  = 12;
-  const totalH = photos.length * (imgH + gap);
+/* Single photo slot that crossfades between 2 photos */
+const PhotoSlot = ({ photos, interval, style }) => {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI(v => (v + 1) % photos.length), interval);
+    return () => clearInterval(t);
+  }, [photos.length, interval]);
 
   return (
-    <div style={{ overflow: 'hidden', flex: 1 }}>
-      <motion.div
-        animate={{ y: [initialY, initialY - totalH] }}
-        transition={{ duration, repeat: Infinity, ease: 'linear' }}
-        style={{ display: 'flex', flexDirection: 'column', gap: `${gap}px` }}
-      >
-        {repeated.map((photo, i) => (
-          <div key={i} style={{
-            flexShrink: 0, height: `${imgH}px`,
-            borderRadius: '10px', overflow: 'hidden',
-            border: '1px solid rgba(240,237,230,0.08)',
-          }}>
-            <img src={photo.src} alt="" style={{
-              width: '100%', height: '100%',
-              objectFit: 'cover', objectPosition: photo.pos, display: 'block',
-            }} />
-          </div>
-        ))}
-      </motion.div>
+    <div style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(240,237,230,0.08)', flexShrink: 0, ...style }}>
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={i}
+          src={photos[i].src}
+          alt="FMI session"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: photos[i].pos, display: 'block' }}
+        />
+      </AnimatePresence>
     </div>
   );
 };
@@ -159,20 +157,16 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        {/* ── RIGHT: scrolling columns, fixed height matching text ── */}
-        <div style={{ position: 'relative', overflow: 'hidden', padding: '48px clamp(16px, 3vw, 36px) 48px 12px', height: '100%' }}>
-          {/* Top fade — matches text paddingTop so photos fade in at same level */}
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '48px', zIndex: 3, background: 'linear-gradient(180deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
-          {/* Bottom fade */}
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '90px', zIndex: 3, background: 'linear-gradient(0deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
-          {/* Left edge fade */}
-          <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '20px', zIndex: 3, background: 'linear-gradient(90deg,#0B0F1A,transparent)', pointerEvents: 'none' }} />
-
-          <div style={{ display: 'flex', gap: '12px', height: '100%' }}>
-            <ScrollColumn photos={col1} duration={18} initialY={0} />
-            <ScrollColumn photos={col2} duration={14} initialY={-110} />
-            <ScrollColumn photos={col3} duration={22} initialY={-55} />
-          </div>
+        {/* ── RIGHT: 3 photo slots, contained within text height ── */}
+        <div style={{
+          padding: '48px clamp(16px, 3vw, 36px) 48px 16px',
+          display: 'flex', gap: '10px', alignItems: 'stretch',
+        }}>
+          {slots.map((photos, col) => (
+            <div key={col} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <PhotoSlot photos={photos} interval={4000 + col * 1200} style={{ flex: 1 }} />
+            </div>
+          ))}
         </div>
       </div>
 
