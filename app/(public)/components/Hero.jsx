@@ -96,8 +96,8 @@ const Hero = () => {
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
-          padding: '48px 40px 48px clamp(20px, calc((100vw - 1200px)/2 + 24px), 120px)',
+          justifyContent: 'flex-start',
+          padding: '48px 40px 48px clamp(20px, 5vw, 80px)',
         }}>
 
           {/* Pill */}
@@ -162,8 +162,8 @@ const Hero = () => {
 
         {/* ── RIGHT: scrolling columns, same paddingTop so same start ── */}
         <div style={{ position: 'relative', overflow: 'hidden', padding: '0 clamp(16px, 3vw, 36px) 0 12px' }}>
-          {/* Top fade — same height as text top padding so first photo isn't visible right at top */}
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '90px', zIndex: 3, background: 'linear-gradient(180deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
+          {/* Top fade — matches text paddingTop so photos fade in at same level */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '48px', zIndex: 3, background: 'linear-gradient(180deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
           {/* Bottom fade */}
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '90px', zIndex: 3, background: 'linear-gradient(0deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
           {/* Left edge fade */}
