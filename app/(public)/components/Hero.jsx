@@ -9,30 +9,31 @@ const WARM_WHITE = THEME.warmWhite;
 const DIM        = THEME.secondary;
 const MUTED      = THEME.muted;
 
-/* 6 photos across 3 columns — 2 per column, scrolling up/down alternately */
-const col1 = [
+/* 9 unique photos — 3 per column, zero repeats across columns */
+const BASE = [
   { src: '/assets/gallery/DSC01373.JPG',    pos: 'center 35%'   },
   { src: '/assets/gallery/IMG_4765.JPG',    pos: 'center center' },
-  { src: '/assets/gallery/DSC01373.JPG',    pos: 'center 35%'   }, // repeat for seamless
-  { src: '/assets/gallery/IMG_4765.JPG',    pos: 'center center' },
+  { src: '/assets/gallery/IMG_2315.JPG',    pos: 'center 38%'   },
 ];
-const col2 = [
-  { src: '/assets/gallery/IMG_3458.JPG',    pos: 'center top'   },
-  { src: '/assets/gallery/IMG_4674.JPG',    pos: 'center 30%'   },
-  { src: '/assets/gallery/IMG_3458.JPG',    pos: 'center top'   },
-  { src: '/assets/gallery/IMG_4674.JPG',    pos: 'center 30%'   },
-];
-const col3 = [
-  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
-  { src: '/assets/gallery/IMG_3727.JPG',    pos: 'center top'   },
-  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
-  { src: '/assets/gallery/IMG_3727.JPG',    pos: 'center top'   },
-];
+const col1 = [...BASE, ...BASE]; // seamless loop
 
-/* imgH + gap must divide evenly into totalH for seamless loop */
-const IMG_H = 190;
-const GAP   = 10;
-const LOOP_H = 2 * (IMG_H + GAP); // 2 unique photos × unit height
+const BASE2 = [
+  { src: '/assets/gallery/IMG_4674.JPG',    pos: 'center 30%'   },
+  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
+  { src: '/assets/gallery/IMG_3727.JPG',    pos: 'center 20%'   },
+];
+const col2 = [...BASE2, ...BASE2];
+
+const BASE3 = [
+  { src: '/assets/gallery/IMG_3458.JPG',    pos: 'center 18%'   }, // Amrit — 18% shows full head
+  { src: '/assets/gallery/DSC01460.JPG',    pos: 'center 30%'   },
+  { src: '/assets/gallery/IMG_4575.JPG',    pos: 'center 35%'   },
+];
+const col3 = [...BASE3, ...BASE3];
+
+const IMG_H  = 190;
+const GAP    = 10;
+const LOOP_H = 3 * (IMG_H + GAP); // 3 unique photos per column
 
 const UpColumn = ({ photos, duration }) => (
   <div style={{ flex: 1, overflow: 'hidden' }}>
