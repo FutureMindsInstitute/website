@@ -354,7 +354,7 @@ const Educators = () => {
         >
           {[
             { value: '15+', label: 'Years Combined Experience' },
-            { value: '500+', label: 'Students Mentored' },
+            { value: '1000+', label: 'Students Mentored' },
             { value: '10+', label: 'Global Companies' },
           ].map((stat, i) => (
             <div
