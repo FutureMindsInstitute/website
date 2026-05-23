@@ -5,7 +5,7 @@ import { motion, useInView } from 'framer-motion';
 import { THEME } from '@/lib/constants';
 
 const metricsData = [
-  { num: '//01', end: 500,  suffix: '+', label: 'Students Trained',      desc: 'Professionals upskilled across all cohorts' },
+  { num: '//01', end: 1000, suffix: '+', label: 'Students Trained',      desc: 'Professionals upskilled across all cohorts' },
   { num: '//02', end: 95,   suffix: '%', label: 'Placement Rate',        desc: 'Students who landed stronger roles' },
   { num: '//03', end: 15,   suffix: '+', label: 'Expert Educators',      desc: 'Industry veterans from global tech firms' },
   { num: '//04', end: 10,   suffix: '+', label: 'Cohorts Delivered',     desc: 'Live programs run to date' },

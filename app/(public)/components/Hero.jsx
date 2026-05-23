@@ -74,7 +74,7 @@ const Hero = () => {
   const scrollToSection = id => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   const stats = [
-    { value: '500+', label: 'Students Trained' },
+    { value: '1000+', label: 'Students Trained' },
     { value: '15+',  label: 'Industry Experts' },
     { value: '95%',  label: 'Placement Rate'   },
     { value: '3+',   label: 'Years Running'    },
