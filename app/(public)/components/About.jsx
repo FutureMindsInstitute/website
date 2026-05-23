@@ -127,56 +127,6 @@ const About = () => (
         ))}
       </div>
 
-      {/* ── GET IN TOUCH ── */}
-      <motion.div {...fade(0.1)} style={{
-        display: 'grid', gridTemplateColumns: '1fr 1fr',
-        gap: '1px', background: 'rgba(240,237,230,0.07)',
-        borderBottom: '1px solid rgba(240,237,230,0.07)',
-      }} className="about-contact-grid">
-        <div style={{ background: '#111827', padding: '44px 36px' }}>
-          <div style={{
-            fontFamily: 'Inter, sans-serif', fontSize: '10px', fontWeight: 700,
-            letterSpacing: '0.25em', color: '#D4AF37', marginBottom: '14px',
-          }}>G E T&nbsp;&nbsp;I N&nbsp;&nbsp;T O U C H</div>
-          <p style={{
-            fontFamily: 'Inter, sans-serif', fontSize: '15px',
-            color: '#6B6B6B', lineHeight: 1.7, margin: 0, maxWidth: '300px',
-          }}>
-            Curious about a workshop for your team? Let's talk.
-          </p>
-        </div>
-        <div style={{ background: '#111827', padding: '44px 36px' }}>
-          <div style={{
-            fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700,
-            fontSize: '18px', color: '#F0EDE6', marginBottom: '4px',
-          }}>Amrit Raj</div>
-          <div style={{
-            fontFamily: 'Inter, sans-serif', fontSize: '12px',
-            color: '#4A4A4A', marginBottom: '22px',
-          }}>Co-founder, Future Minds Institute</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {[
-              { label: 'Email', value: 'amrit.raj@futuremindsinstitute.com', href: 'mailto:amrit.raj@futuremindsinstitute.com' },
-              { label: 'Phone', value: '+91 70226 12623', href: 'tel:+917022612623' },
-            ].map(({ label, value, href }) => (
-              <div key={label} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <span style={{
-                  fontFamily: 'Inter, sans-serif', fontSize: '9px', fontWeight: 700,
-                  letterSpacing: '0.12em', color: '#3A3A3A', textTransform: 'uppercase', flexShrink: 0, width: '36px',
-                }}>{label}</span>
-                <a href={href} style={{
-                  fontFamily: 'Inter, sans-serif', fontSize: '14px',
-                  color: '#D4AF37', textDecoration: 'none', transition: 'color 0.2s',
-                }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#F0EDE6'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#D4AF37'}
-                >{value}</a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-
     </div>
 
     <style jsx>{`
