@@ -4,7 +4,6 @@ import React from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import Metrics from "./components/Metrics";
 import Courses from "./components/Courses";
 import BentoFeatures from "./components/BentoFeatures";
 import Stories from "./components/Stories";
@@ -22,7 +21,6 @@ const LandingPage = () => {
       <Navbar />
       <Hero />
       <About />
-      <Metrics />
       <Courses />
       <BentoFeatures />
       <Stories />
