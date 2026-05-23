@@ -80,7 +80,7 @@ const Hero = () => {
     { value: '3+',   label: 'Years Running'    },
   ];
 
-  const marqueeWords = 'AI Mastery · Prompt Engineering · Agent Building · Team Training · Live Workshops · Industry Mentors · ';
+  const marqueeWords = 'AI Mastery   Prompt Engineering   Agent Building   Team Training   Live Workshops   Industry Mentors   ';
 
   return (
     <section id="hero" style={{ background: '#0B0F1A', overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative' }}>
