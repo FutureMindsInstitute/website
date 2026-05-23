@@ -35,10 +35,11 @@ const IMG_H  = 190;
 const GAP    = 10;
 const LOOP_H = 3 * (IMG_H + GAP); // 3 unique photos per column
 
-const UpColumn = ({ photos, duration }) => (
+/* offset: start already scrolled so first photo fills top edge immediately */
+const UpColumn = ({ photos, duration, startOffset = 0 }) => (
   <div style={{ flex: 1, overflow: 'hidden' }}>
     <motion.div
-      animate={{ y: [0, -LOOP_H] }}
+      animate={{ y: [-startOffset, -startOffset - LOOP_H] }}
       transition={{ duration, repeat: Infinity, ease: 'linear' }}
       style={{ display: 'flex', flexDirection: 'column', gap: `${GAP}px` }}
     >
@@ -51,10 +52,10 @@ const UpColumn = ({ photos, duration }) => (
   </div>
 );
 
-const DownColumn = ({ photos, duration }) => (
+const DownColumn = ({ photos, duration, startOffset = 0 }) => (
   <div style={{ flex: 1, overflow: 'hidden' }}>
     <motion.div
-      animate={{ y: [-LOOP_H, 0] }}
+      animate={{ y: [-LOOP_H + startOffset, startOffset] }}
       transition={{ duration, repeat: Infinity, ease: 'linear' }}
       style={{ display: 'flex', flexDirection: 'column', gap: `${GAP}px` }}
     >
@@ -162,15 +163,17 @@ const Hero = () => {
 
         {/* ── RIGHT: 3 columns alternating up/down, clipped to block height ── */}
         <div style={{ position: 'relative', overflow: 'hidden', padding: '0 clamp(16px, 3vw, 36px) 0 12px', display: 'flex', alignItems: 'stretch' }}>
-          {/* Top + bottom fades */}
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '80px', zIndex: 3, background: 'linear-gradient(180deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
+          {/* Tiny top fade — just enough to blend with navbar, no visible gap */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '32px', zIndex: 3, background: 'linear-gradient(180deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
+          {/* Bottom fade */}
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px', zIndex: 3, background: 'linear-gradient(0deg,#0B0F1A 0%,transparent 100%)', pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '20px', zIndex: 3, background: 'linear-gradient(90deg,#0B0F1A,transparent)', pointerEvents: 'none' }} />
 
           <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-            <UpColumn   photos={col1} duration={12} />
-            <DownColumn photos={col2} duration={15} />
-            <UpColumn   photos={col3} duration={10} />
+            {/* startOffset = how far into the first photo we start, so top is never blank */}
+            <UpColumn   photos={col1} duration={14} startOffset={80}  />
+            <DownColumn photos={col2} duration={17} startOffset={140} />
+            <UpColumn   photos={col3} duration={11} startOffset={50}  />
           </div>
         </div>
       </div>
