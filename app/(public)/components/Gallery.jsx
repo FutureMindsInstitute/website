@@ -3,26 +3,83 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+/*
+  Photos NOT used in hero columns — curated, no head cuts.
+  Each has an explicit height so columns fill completely with no gaps.
+*/
 const photos = [
-  { src: '/assets/gallery/DSC01373.JPG',                                            pos: 'center 35%', tall: true  },
-  { src: '/assets/gallery/IMG_4674.JPG',                                            pos: 'center 30%', tall: false },
-  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center',tall: false},
-  { src: '/assets/gallery/IMG_4765.JPG',                                            pos: 'center center',tall: false},
-  { src: '/assets/gallery/IMG_3764.JPG',                                            pos: 'center 40%', tall: true  },
-  { src: '/assets/gallery/IMG_3727.JPG',                                            pos: 'center top',  tall: false },
-  { src: '/assets/gallery/IMG_2315.JPG',                                            pos: 'center 38%', tall: false },
-  { src: '/assets/gallery/IMG_3458.JPG',                                            pos: 'center 18%', tall: false },
-  { src: '/assets/gallery/DSC01460.JPG',                                            pos: 'center 30%', tall: true  },
-  { src: '/assets/gallery/IMG_4575.JPG',                                            pos: 'center 35%', tall: false },
-  { src: '/assets/gallery/IMG_2476.JPG',                                            pos: 'center center',tall: false},
-  { src: '/assets/gallery/IMG_3687.JPG',                                            pos: 'center center',tall: false},
-  { src: '/assets/gallery/IMG_2260.JPG',                                            pos: 'center center',tall: false},
-  { src: '/assets/gallery/IMG_8668.JPG',                                            pos: 'center center',tall: false},
-  { src: '/assets/gallery/IMG_0024 (2).jpg',                                        pos: 'center center',tall: false},
-  { src: '/assets/gallery/IMG_0030 (1).jpg',                                        pos: 'center center',tall: false},
-  { src: '/assets/gallery/IMG_4853.JPG',                                            pos: 'center center',tall: false},
-  { src: '/assets/gallery/IMG_5308.JPG',                                            pos: 'center center',tall: false},
+  { src: '/assets/gallery/IMG_3687.JPG',         pos: 'center 30%',   h: 240 },
+  { src: '/assets/gallery/IMG_3743 3.JPG',        pos: 'center 40%',   h: 200 },
+  { src: '/assets/gallery/IMG_3764.JPG',          pos: 'center 42%',   h: 260 },
+  { src: '/assets/gallery/IMG_8668.JPG',          pos: 'center 35%',   h: 200 },
+  { src: '/assets/gallery/IMG_0030 (1).jpg',      pos: 'center 15%',   h: 300 },
+  { src: '/assets/gallery/IMG_2476.JPG',          pos: 'center 30%',   h: 220 },
+  { src: '/assets/gallery/IMG_2260.JPG',          pos: 'center 38%',   h: 200 },
+  { src: '/assets/gallery/IMG_3423 2.JPG',        pos: 'center 30%',   h: 230 },
+  { src: '/assets/gallery/IMG_0024 (2).jpg',      pos: 'center 35%',   h: 200 },
+  { src: '/assets/gallery/IMG_5308.JPG',          pos: 'center center', h: 220 },
+  { src: '/assets/gallery/IMG_6578.JPG',          pos: 'center 30%',   h: 200 },
+  { src: '/assets/gallery/IMG_7092.JPG',          pos: 'center 35%',   h: 230 },
+  { src: '/assets/gallery/IMG_4853.JPG',          pos: 'center center', h: 200 },
+  { src: '/assets/gallery/IMG_9916.JPG',          pos: 'center 20%',   h: 280 },
+  { src: '/assets/gallery/IMG_0568.JPG',          pos: 'center 30%',   h: 220 },
+  { src: '/assets/gallery/e81d4bc9-751b-40cc-86d5-c513b3fbc65b-copied-media~2.jpg', pos: 'center 35%', h: 210 },
+  { src: '/assets/gallery/BD013A83-54ED-4A33-ACE2-9283DE0D9037_4_5005_c (1).jpeg', pos: 'center 30%', h: 200 },
+  { src: '/assets/gallery/IMG_3505.jpg',          pos: 'center 25%',   h: 230 },
 ];
+
+/* Distribute into 3 columns manually — fills evenly, no CSS column gaps */
+const col1 = photos.filter((_, i) => i % 3 === 0);
+const col2 = photos.filter((_, i) => i % 3 === 1);
+const col3 = photos.filter((_, i) => i % 3 === 2);
+
+const PhotoItem = ({ photo, onClick, delay }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 16 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-20px' }}
+    transition={{ duration: 0.45, delay }}
+    onClick={() => onClick(photo)}
+    className="gallery-item"
+    style={{
+      position: 'relative',
+      borderRadius: '10px',
+      overflow: 'hidden',
+      cursor: 'pointer',
+      border: '1px solid rgba(240,237,230,0.07)',
+      flexShrink: 0,
+    }}
+  >
+    <img
+      src={photo.src}
+      alt="FMI session"
+      style={{
+        width: '100%',
+        height: `${photo.h}px`,
+        objectFit: 'cover',
+        objectPosition: photo.pos,
+        display: 'block',
+        transition: 'transform 0.5s ease',
+      }}
+    />
+    <div className="gallery-hover" style={{
+      position: 'absolute', inset: 0,
+      background: 'rgba(11,15,26,0.35)',
+      opacity: 0, transition: 'opacity 0.25s',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}>
+      <div style={{
+        width: '36px', height: '36px', borderRadius: '50%',
+        background: 'rgba(11,15,26,0.7)', border: '1px solid rgba(212,175,55,0.6)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <svg width="13" height="13" fill="none" stroke="#D4AF37" strokeWidth="2" viewBox="0 0 24 24">
+          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" strokeLinecap="round" />
+        </svg>
+      </div>
+    </div>
+  </motion.div>
+);
 
 const Gallery = () => {
   const [lightbox, setLightbox] = useState(null);
@@ -48,58 +105,20 @@ const Gallery = () => {
         </motion.div>
       </div>
 
-      {/* Grid */}
+      {/* 3-column manual layout — no CSS columns gaps */}
       <div className="container-fm">
-        <div style={{ columns: '3 260px', columnGap: '10px' }} className="gallery-grid">
-          {photos.map((photo, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-20px' }}
-              transition={{ duration: 0.45, delay: (i % 6) * 0.05 }}
-              onClick={() => setLightbox(photo)}
-              className="gallery-item"
-              style={{
-                display: 'block',
-                marginBottom: '10px',
-                breakInside: 'avoid',
-                position: 'relative',
-                borderRadius: '10px',
-                overflow: 'hidden',
-                cursor: 'pointer',
-                border: '1px solid rgba(240,237,230,0.07)',
-              }}
-            >
-              <img
-                src={photo.src}
-                alt="FMI session"
-                style={{
-                  width: '100%',
-                  height: photo.tall ? '320px' : '210px',
-                  objectFit: 'cover',
-                  objectPosition: photo.pos,
-                  display: 'block',
-                  transition: 'transform 0.5s ease',
-                }}
-              />
-              <div className="gallery-hover" style={{
-                position: 'absolute', inset: 0,
-                background: 'rgba(11,15,26,0.35)',
-                opacity: 0, transition: 'opacity 0.25s',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <div style={{
-                  width: '36px', height: '36px', borderRadius: '50%',
-                  background: 'rgba(11,15,26,0.7)', border: '1px solid rgba(212,175,55,0.6)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <svg width="13" height="13" fill="none" stroke="#D4AF37" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" strokeLinecap="round" />
-                  </svg>
-                </div>
-              </div>
-            </motion.div>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }} className="gallery-cols">
+          {[col1, col2, col3].map((col, ci) => (
+            <div key={ci} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {col.map((photo, pi) => (
+                <PhotoItem
+                  key={pi}
+                  photo={photo}
+                  onClick={setLightbox}
+                  delay={(ci * 2 + pi) * 0.04}
+                />
+              ))}
+            </div>
           ))}
         </div>
       </div>
@@ -130,8 +149,13 @@ const Gallery = () => {
       <style jsx>{`
         .gallery-item:hover img { transform: scale(1.04); }
         .gallery-item:hover .gallery-hover { opacity: 1 !important; }
-        @media (max-width: 768px) { .gallery-grid { columns: 2 !important; } }
-        @media (max-width: 480px) { .gallery-grid { columns: 1 !important; } }
+        @media (max-width: 768px) {
+          .gallery-cols { flex-wrap: wrap !important; }
+          .gallery-cols > div { flex: 1 1 calc(50% - 5px) !important; }
+        }
+        @media (max-width: 480px) {
+          .gallery-cols > div { flex: 1 1 100% !important; }
+        }
       `}</style>
     </section>
   );
