@@ -8,11 +8,11 @@ import { motion, AnimatePresence } from 'framer-motion';
   Each has an explicit height so columns fill completely with no gaps.
 */
 const photos = [
-  { src: '/assets/gallery/IMG_3687.JPG',         pos: 'center 30%',   h: 240 },
+  { src: '/assets/gallery/IMG_3687.JPG',         pos: 'center 30%',   h: 260 },
   { src: '/assets/gallery/IMG_3743 3.JPG',        pos: 'center 40%',   h: 200 },
-  { src: '/assets/gallery/IMG_3764.JPG',          pos: 'center 42%',   h: 260 },
-  { src: '/assets/gallery/IMG_8668.JPG',          pos: 'center 35%',   h: 200 },
-  { src: '/assets/gallery/IMG_0030 (1).jpg',      pos: 'center 15%',   h: 300 },
+  { src: '/assets/gallery/IMG_3764.JPG',          pos: 'center 42%',   h: 250 },
+  { src: '/assets/gallery/IMG_8668.JPG',          pos: 'center 35%',   h: 230 },
+  { src: '/assets/gallery/IMG_0030 (1).jpg',      pos: 'center 15%',   h: 270 },
   { src: '/assets/gallery/IMG_2476.JPG',          pos: 'center 30%',   h: 220 },
   { src: '/assets/gallery/IMG_2260.JPG',          pos: 'center 38%',   h: 200 },
   { src: '/assets/gallery/IMG_3423 2.JPG',        pos: 'center 30%',   h: 230 },
@@ -20,8 +20,8 @@ const photos = [
   { src: '/assets/gallery/IMG_5308.JPG',          pos: 'center center', h: 220 },
   { src: '/assets/gallery/IMG_6578.JPG',          pos: 'center 30%',   h: 200 },
   { src: '/assets/gallery/IMG_7092.JPG',          pos: 'center 35%',   h: 230 },
-  { src: '/assets/gallery/IMG_4853.JPG',          pos: 'center center', h: 200 },
-  { src: '/assets/gallery/IMG_9916.JPG',          pos: 'center 20%',   h: 280 },
+  { src: '/assets/gallery/IMG_4853.JPG',          pos: 'center center', h: 230 },
+  { src: '/assets/gallery/IMG_9916.JPG',          pos: 'center 20%',   h: 250 },
   { src: '/assets/gallery/IMG_0568.JPG',          pos: 'center 30%',   h: 220 },
   { src: '/assets/gallery/e81d4bc9-751b-40cc-86d5-c513b3fbc65b-copied-media~2.jpg', pos: 'center 35%', h: 210 },
   { src: '/assets/gallery/BD013A83-54ED-4A33-ACE2-9283DE0D9037_4_5005_c (1).jpeg', pos: 'center 30%', h: 200 },
@@ -85,7 +85,7 @@ const Gallery = () => {
   const [lightbox, setLightbox] = useState(null);
 
   return (
-    <section id="gallery" style={{ background: '#0B0F1A', padding: '96px 0 80px', position: 'relative' }}>
+    <section id="gallery" style={{ background: '#0B0F1A', padding: '96px 0 48px', position: 'relative' }}>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'rgba(240,237,230,0.07)' }} />
 
       {/* Header */}
