@@ -353,7 +353,7 @@ const Educators = () => {
           className="edu-stats-grid"
         >
           {[
-            { value: '15+', label: 'Years Combined Experience' },
+            { value: '25+', label: 'Years Combined Experience' },
             { value: '1000+', label: 'Students Mentored' },
             { value: '10+', label: 'Global Companies' },
           ].map((stat, i) => (

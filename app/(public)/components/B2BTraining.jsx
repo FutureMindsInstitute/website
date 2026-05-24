@@ -7,7 +7,7 @@ import { THEME } from '@/lib/constants';
 const specs = [
   { label: 'Format', value: '3-hour live workshop' },
   { label: 'Delivery', value: 'Online, in-person, or hybrid' },
-  { label: 'Cohort Size', value: 'Up to 40 per session' },
+  { label: 'Cohort Size', value: 'Upto 20 per session' },
   { label: 'Customisation', value: "Built around your team's actual workflows" },
   { label: 'Prerequisites', value: 'None. Built for non-technical teams' },
   { label: 'Takeaways', value: 'Slide deck, full cheatbook, daily productivity sheet' },
@@ -384,13 +384,6 @@ const B2BTraining = () => {
             >
               Book a 20-Min Scoping Call
             </a>
-            <button
-              className="btn-secondary"
-              style={{ padding: '14px 30px', fontSize: '15px', borderRadius: '12px' }}
-              onClick={() => window.open('mailto:amrit.raj@futuremindsinstitute.com?subject=Workshop%20Brief%20Request', '_blank')}
-            >
-              Download Workshop Brief
-            </button>
           </div>
         </motion.div>
       </div>
