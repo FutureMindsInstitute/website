@@ -11,23 +11,23 @@ const MUTED      = THEME.muted;
 
 /* 9 unique photos — 3 per column, zero repeats across columns */
 const BASE = [
-  { src: '/assets/gallery/DSC01373.JPG',    pos: 'center 35%'   },
-  { src: '/assets/gallery/IMG_4765.JPG',    pos: 'center center' },
-  { src: '/assets/gallery/IMG_2315.JPG',    pos: 'center 38%'   },
+  { src: '/assets/gallery/DSC01373.JPG',    pos: 'center 20%'   },
+  { src: '/assets/gallery/IMG_4765.JPG',    pos: 'center 25%'   },
+  { src: '/assets/gallery/IMG_2315.JPG',    pos: 'center 22%'   },
 ];
 const col1 = [...BASE, ...BASE]; // seamless loop
 
 const BASE2 = [
-  { src: '/assets/gallery/IMG_4674.JPG',    pos: 'center 30%'   },
-  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center center' },
-  { src: '/assets/gallery/IMG_3727.JPG',    pos: 'center 20%'   },
+  { src: '/assets/gallery/IMG_4674.JPG',    pos: 'center 18%'   },
+  { src: '/assets/gallery/D808416C-12EF-41AE-9259-D48A1D746B6E_1_102_o (2).jpeg', pos: 'center 25%' },
+  { src: '/assets/gallery/IMG_3727.JPG',    pos: 'center 15%'   },
 ];
 const col2 = [...BASE2, ...BASE2];
 
 const BASE3 = [
-  { src: '/assets/gallery/IMG_3458.JPG',    pos: 'center 18%'   }, // Amrit — 18% shows full head
-  { src: '/assets/gallery/DSC01460.JPG',    pos: 'center 30%'   },
-  { src: '/assets/gallery/IMG_4575.JPG',    pos: 'center 35%'   },
+  { src: '/assets/gallery/IMG_3458.JPG',    pos: 'center 15%'   }, // Amrit — shows full head
+  { src: '/assets/gallery/DSC01460.JPG',    pos: 'center 18%'   },
+  { src: '/assets/gallery/IMG_4575.JPG',    pos: 'center 20%'   },
 ];
 const col3 = [...BASE3, ...BASE3];
 

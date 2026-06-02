@@ -10,6 +10,7 @@ import BentoFeatures from "./components/BentoFeatures";
 import Stories from "./components/Stories";
 import Educators from "./components/Educators";
 import B2BTraining from "./components/B2BTraining";
+import TrustedBy from "./components/TrustedBy";
 import Gallery from "./components/Gallery";
 import Footer from "./components/Footer";
 import LoginModal from "./components/modals/login";
@@ -21,6 +22,7 @@ const LandingPage = () => {
     <div className="min-h-screen bg-void">
       <Navbar />
       <Hero />
+      <TrustedBy />
       <About />
       <Metrics />
       <Courses />
