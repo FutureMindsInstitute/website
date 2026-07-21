@@ -413,9 +413,9 @@ const Courses = ({ initialCourses = null, initialCategories = null }) => {
     );
   }
 
-  const showForm = error || (!loading && courses.length === 0);
+  const showCTA = error || (!loading && courses.length === 0);
 
-  if (showForm) {
+  if (showCTA) {
     return (
       <section
         id="courses"
@@ -463,110 +463,39 @@ const Courses = ({ initialCourses = null, initialCategories = null }) => {
               color: '#6B6B6B',
               maxWidth: '520px',
               lineHeight: 1.65,
-              marginBottom: '56px',
+              marginBottom: '40px',
             }}
           >
-            Our first course is launching soon. Register your interest below and be the first to know when it goes live.
+            Our first course is launching soon. Register your interest and be the first to know when it goes live.
           </p>
 
-          <div
+          <a
+            href="https://forms.gle/zz8ay8CSEdyZmckH7"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '40px',
-              alignItems: 'start',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '14px 32px',
+              background: '#D4AF37',
+              borderRadius: '10px',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '15px',
+              fontWeight: 700,
+              color: '#0B0F1A',
+              textDecoration: 'none',
+              transition: 'opacity 0.2s ease',
             }}
-            className="courses-form-grid"
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.88'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
           >
-            {/* Left — value props */}
-            <div>
-              {[
-                { title: 'Industry-led curriculum', desc: 'Built by professionals from Google, Amazon, Microsoft and more.' },
-                { title: 'Hands-on projects', desc: 'Walk away with portfolio deliverables you can show any employer.' },
-                { title: 'Live cohort sessions', desc: 'Learn in real-time alongside peers, not just recorded videos.' },
-                { title: 'WIP India community', desc: 'Join a network of 500+ AI-forward professionals post-cohort.' },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: 'flex',
-                    gap: '16px',
-                    marginBottom: '28px',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '8px',
-                      background: 'rgba(212,175,55,0.10)',
-                      border: '1px solid rgba(212,175,55,0.22)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <span style={{ color: '#D4AF37', fontSize: '14px', fontWeight: 700 }}>+</span>
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: '16px', color: '#F0EDE6', marginBottom: '4px' }}>
-                      {item.title}
-                    </div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#6B6B6B', lineHeight: 1.6 }}>
-                      {item.desc}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Right — Google Form */}
-            <div
-              style={{
-                background: '#111827',
-                border: '1px solid rgba(240,237,230,0.07)',
-                borderRadius: '16px',
-                overflow: 'hidden',
-              }}
-            >
-              <div
-                style={{
-                  padding: '20px 24px',
-                  borderBottom: '1px solid rgba(240,237,230,0.06)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                }}
-              >
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#D4AF37' }} />
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 600, color: '#F0EDE6' }}>
-                  Register Your Interest
-                </span>
-              </div>
-              <iframe
-                src="https://forms.gle/zz8ay8CSEdyZmckH7"
-                width="100%"
-                height="560"
-                frameBorder="0"
-                marginHeight="0"
-                marginWidth="0"
-                style={{ display: 'block', background: 'transparent' }}
-                title="Course Interest Form"
-              >
-                Loading form…
-              </iframe>
-            </div>
-          </div>
+            Register Your Interest
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
         </div>
-
-        <style jsx>{`
-          @media (max-width: 768px) {
-            .courses-form-grid {
-              grid-template-columns: 1fr !important;
-            }
-          }
-        `}</style>
       </section>
     );
   }
