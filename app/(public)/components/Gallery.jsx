@@ -8,24 +8,24 @@ import { motion, AnimatePresence } from 'framer-motion';
   Each has an explicit height so columns fill completely with no gaps.
 */
 const photos = [
-  { src: '/assets/gallery/IMG_3687.JPG',         pos: 'center 20%',   h: 260 },
-  { src: '/assets/gallery/IMG_3743 3.JPG',        pos: 'center 25%',   h: 200 },
-  { src: '/assets/gallery/IMG_3764.JPG',          pos: 'center 25%',   h: 250 },
-  { src: '/assets/gallery/IMG_8668.JPG',          pos: 'center 20%',   h: 230 },
-  { src: '/assets/gallery/IMG_0030 (1).jpg',      pos: 'center 80%',   h: 270 },
-  { src: '/assets/gallery/IMG_2476.JPG',          pos: 'center 18%',   h: 220 },
-  { src: '/assets/gallery/IMG_2260.JPG',          pos: 'center 22%',   h: 200 },
-  { src: '/assets/gallery/IMG_3423 2.JPG',        pos: 'center 75%',   h: 230 },
-  { src: '/assets/gallery/IMG_0024 (2).jpg',      pos: 'center 20%',   h: 200 },
-  { src: '/assets/gallery/IMG_5308.JPG',          pos: 'center 55%',   h: 220 },
-  { src: '/assets/gallery/IMG_6578.JPG',          pos: 'center 18%',   h: 200 },
-  { src: '/assets/gallery/IMG_7092.JPG',          pos: 'center 20%',   h: 230 },
-  { src: '/assets/gallery/IMG_4853.JPG',          pos: 'center 35%',   h: 230 },
-  { src: '/assets/gallery/IMG_9916.JPG',          pos: 'center 60%',   h: 250 },
-  { src: '/assets/gallery/IMG_0568.JPG',          pos: 'center 18%',   h: 220 },
-  { src: '/assets/gallery/e81d4bc9-751b-40cc-86d5-c513b3fbc65b-copied-media~2.jpg', pos: 'center bottom', h: 210 },
-  { src: '/assets/gallery/BD013A83-54ED-4A33-ACE2-9283DE0D9037_4_5005_c (1).jpeg', pos: 'center bottom', h: 200 },
-  { src: '/assets/gallery/IMG_3505.jpg',          pos: 'center bottom', h: 230 },
+  { src: '/assets/gallery/IMG_3687.JPG',         pos: 'center 35%',   h: 260 }, // speaker at podium
+  { src: '/assets/gallery/IMG_3743 3.JPG',        pos: 'center 40%',   h: 200 }, // audience in lecture hall
+  { src: '/assets/gallery/IMG_3764.JPG',          pos: 'center 55%',   h: 250 }, // wide hall, people in lower half
+  { src: '/assets/gallery/IMG_8668.JPG',          pos: 'center 40%',   h: 230 }, // IKP Eden workshop
+  { src: '/assets/gallery/IMG_0030 (1).jpg',      pos: 'center 30%',   h: 270 }, // woman speaker portrait — face in upper third
+  { src: '/assets/gallery/IMG_2476.JPG',          pos: 'center 40%',   h: 220 }, // group photo + audience
+  { src: '/assets/gallery/IMG_2260.JPG',          pos: 'center 30%',   h: 200 }, // women posing Urban Vault
+  { src: '/assets/gallery/IMG_3423 2.JPG',        pos: 'center 35%',   h: 230 }, // office meeting portrait — faces in upper half
+  { src: '/assets/gallery/IMG_0024 (2).jpg',      pos: 'center 35%',   h: 200 }, // presentation wide shot
+  { src: '/assets/gallery/IMG_5308.JPG',          pos: 'center 45%',   h: 220 }, // group photo, ceiling occupies top
+  { src: '/assets/gallery/IMG_6578.JPG',          pos: 'center 30%',   h: 200 }, // event presenters on stage
+  { src: '/assets/gallery/IMG_7092.JPG',          pos: 'center 35%',   h: 230 }, // AWS podcast group
+  { src: '/assets/gallery/IMG_4853.JPG',          pos: 'center 42%',   h: 230 }, // Bhive fireside chat
+  { src: '/assets/gallery/IMG_9916.JPG',          pos: 'center 35%',   h: 250 }, // outdoor group photo — faces fill middle
+  { src: '/assets/gallery/IMG_0568.JPG',          pos: 'center 40%',   h: 220 }, // small workshop session
+  { src: '/assets/gallery/e81d4bc9-751b-40cc-86d5-c513b3fbc65b-copied-media~2.jpg', pos: 'center 40%', h: 210 }, // classroom audience
+  { src: '/assets/gallery/BD013A83-54ED-4A33-ACE2-9283DE0D9037_4_5005_c (1).jpeg', pos: 'center 30%', h: 200 }, // lecture hall from back
+  { src: '/assets/gallery/IMG_3505.jpg',          pos: 'center 40%',   h: 230 }, // Marzi office group
 ];
 
 /* Distribute into 3 columns manually — fills evenly, no CSS column gaps */
