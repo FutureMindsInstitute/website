@@ -28,12 +28,12 @@ const BarIndicator = ({ bars = 4, delay = 0 }) => (
 
 /* ── Company grid with spring pop ───────────────────── */
 const companies = [
-  { name: 'Google',    logo: '/assets/partners/google.svg',    h: 22 },
-  { name: 'Amazon',   logo: '/assets/partners/amazon.svg',    h: 22 },
-  { name: 'Microsoft',logo: '/assets/partners/microsoft.svg', h: 22 },
-  { name: 'Meta',     logo: '/assets/partners/meta.svg',      h: 22 },
-  { name: 'Flipkart', logo: '/assets/partners/flipkart.png',  h: 32 },
-  { name: 'PwC',      logo: '/assets/partners/pwc.svg',       h: 22 },
+  { name: 'Google',    logo: '/assets/partners/google.svg',    h: 22, maxW: 90  },
+  { name: 'Amazon',   logo: '/assets/partners/amazon.svg',    h: 22, maxW: 90  },
+  { name: 'Microsoft',logo: '/assets/partners/microsoft.svg', h: 22, maxW: 90  },
+  { name: 'Meta',     logo: '/assets/partners/meta.svg',      h: 22, maxW: 90  },
+  { name: 'Flipkart', logo: '/assets/partners/flipkart.png',  h: 28, maxW: 130 },
+  { name: 'PwC',      logo: '/assets/partners/pwc.svg',       h: 32, maxW: 90  },
 ];
 
 const NetworkCard = () => (
@@ -63,7 +63,7 @@ const NetworkCard = () => (
           alt={company.name}
           style={{
             height: `${company.h}px`,
-            maxWidth: '90px',
+            maxWidth: `${company.maxW}px`,
             objectFit: 'contain',
             filter: 'brightness(0) invert(1)',
             opacity: 0.75,
