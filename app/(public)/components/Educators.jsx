@@ -20,6 +20,7 @@ const educators = [
     linkedin: 'https://www.linkedin.com/in/swati-awasthi/',
     twitter: 'https://x.com/swatiawasthi08',
     instagram: 'https://www.instagram.com/awasthiswati/?hl=en',
+    video: null,
   },
   {
     name: 'Amrit Raj',
@@ -36,6 +37,7 @@ const educators = [
     specialties: ['Education Technology', 'Social Strategy', 'Mentoring', 'Technical Leadership'],
     linkedin: 'https://www.linkedin.com/in/amritraj02/',
     instagram: 'https://www.instagram.com/amrit_rj/?hl=en',
+    video: 'r2XVNmMhACk',
   },
   {
     name: 'Amrita Bajaj',
@@ -51,6 +53,7 @@ const educators = [
     ],
     specialties: ['AI Consulting', 'Marketing Strategy', 'GTM Strategy', 'Business Growth'],
     linkedin: 'https://www.linkedin.com/in/amrita-bajaj/',
+    video: 'AifwxEsU0NY',
   },
   {
     name: 'Lakshya Rastogi',
@@ -66,6 +69,7 @@ const educators = [
     ],
     specialties: ['UPSC Education', 'AI Automation', 'Content Creation', 'Sustainability'],
     linkedin: 'https://www.linkedin.com/in/lakshya-rastogi-b2a27618a/',
+    video: 'jxhYIoCngSY',
   },
 ];
 
@@ -353,7 +357,7 @@ const Educators = () => {
                 </div>
 
                 {/* Specialties */}
-                <div>
+                <div style={{ marginBottom: edu.video ? '24px' : '0' }}>
                   <div
                     style={{
                       fontFamily: 'Inter, sans-serif',
@@ -387,10 +391,101 @@ const Educators = () => {
                     ))}
                   </div>
                 </div>
+
+                {/* Intro video */}
+                {edu.video && (
+                  <div>
+                    <div
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        letterSpacing: '0.12em',
+                        textTransform: 'uppercase',
+                        color: '#3A3A3A',
+                        marginBottom: '10px',
+                      }}
+                    >
+                      Introductory Video
+                    </div>
+                    <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(240,237,230,0.08)' }}>
+                      <iframe
+                        src={`https://www.youtube.com/embed/${edu.video}`}
+                        title={`${edu.name} Introduction`}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          border: 'none',
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
         </div>
+
+        {/* Form CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          style={{
+            marginTop: '56px',
+            padding: '40px',
+            background: 'rgba(212,175,55,0.05)',
+            border: '1px solid rgba(212,175,55,0.2)',
+            borderRadius: '16px',
+            textAlign: 'center',
+          }}
+        >
+          <p style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 'clamp(20px, 2.5vw, 28px)', color: '#F0EDE6', marginBottom: '8px', lineHeight: 1.3 }}>
+            Want to upskill your career with AI?
+          </p>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#6B6B6B', marginBottom: '28px', lineHeight: 1.6 }}>
+            Learn directly from these experts. Fill out the form and we'll be in touch.
+          </p>
+          <a
+            href="https://forms.gle/zz8ay8CSEdyZmckH7"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '14px 32px',
+              background: '#D4AF37',
+              color: '#0B0F1A',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 700,
+              fontSize: '14px',
+              letterSpacing: '0.04em',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              transition: 'background 0.2s ease, transform 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#E8C84A';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#D4AF37';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            Fill Out the Form
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
+        </motion.div>
 
       </div>
 
