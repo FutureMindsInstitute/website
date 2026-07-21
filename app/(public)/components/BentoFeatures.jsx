@@ -362,7 +362,7 @@ const BentoFeatures = () => {
             />
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '28px' }}>
               {[
-                { value: '500+', label: 'Members' },
+                { value: '1000+', label: 'Members' },
                 { value: '10+',  label: 'Events/year' },
                 { value: '95%',  label: 'Placement' },
                 { value: 'WIP',  label: 'India Network' },
