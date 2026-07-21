@@ -27,13 +27,20 @@ const BarIndicator = ({ bars = 4, delay = 0 }) => (
 );
 
 /* ── Company grid with spring pop ───────────────────── */
-const companies = ['Google', 'Amazon', 'Microsoft', 'Meta', 'Flipkart', 'PwC'];
+const companies = [
+  { name: 'Google',    logo: '/assets/partners/google.svg' },
+  { name: 'Amazon',   logo: '/assets/partners/amazon.svg' },
+  { name: 'Microsoft',logo: '/assets/partners/microsoft.svg' },
+  { name: 'Meta',     logo: '/assets/partners/meta.svg' },
+  { name: 'Flipkart', logo: '/assets/partners/flipkart.png' },
+  { name: 'PwC',      logo: '/assets/partners/pwc.svg' },
+];
 
 const NetworkCard = () => (
   <div style={{ marginTop: '28px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-    {companies.map((name, i) => (
+    {companies.map((company, i) => (
       <motion.div
-        key={name}
+        key={company.name}
         initial={{ opacity: 0, scale: 0.7, y: 10 }}
         whileInView={{ opacity: 1, scale: 1, y: 0 }}
         viewport={{ once: true }}
@@ -43,21 +50,40 @@ const NetworkCard = () => (
           background: 'rgba(240,237,230,0.04)',
           border: '1px solid rgba(240,237,230,0.08)',
           borderRadius: '8px',
-          padding: '14px 10px',
-          textAlign: 'center',
+          padding: '16px 12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '64px',
+          cursor: 'default',
+        }}
+      >
+        <img
+          src={company.logo}
+          alt={company.name}
+          style={{
+            height: '22px',
+            maxWidth: '90px',
+            objectFit: 'contain',
+            filter: 'brightness(0) invert(1)',
+            opacity: 0.75,
+            display: 'block',
+          }}
+          onError={(e) => {
+            e.currentTarget.style.display = 'none';
+            e.currentTarget.nextSibling.style.display = 'block';
+          }}
+        />
+        <span style={{
+          display: 'none',
           fontFamily: 'Inter, sans-serif',
           fontSize: '13px',
           fontWeight: 600,
           color: '#8A8A8A',
           letterSpacing: '0.04em',
-          cursor: 'default',
-          minHeight: '48px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {name}
+        }}>
+          {company.name}
+        </span>
       </motion.div>
     ))}
   </div>
