@@ -395,7 +395,7 @@ const BentoFeatures = () => {
 
             {/* WIP India website link */}
             <motion.a
-              href="https://womeninproductindia.co"
+              href="https://womeninproductindia.com"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 10 }}
@@ -424,7 +424,7 @@ const BentoFeatures = () => {
               }}
             >
               <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 600, color: '#D4AF37', letterSpacing: '0.02em' }}>
-                womeninproductindia.co
+                womeninproductindia.com
               </span>
               <svg width="12" height="12" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
                 <path d="M7 17L17 7M17 7H7M17 7v10" />
