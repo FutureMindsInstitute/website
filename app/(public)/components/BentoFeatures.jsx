@@ -392,6 +392,44 @@ const BentoFeatures = () => {
                 </motion.div>
               ))}
             </div>
+
+            {/* WIP India website link */}
+            <motion.a
+              href="https://womeninproductindia.co"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.6 }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginTop: '14px',
+                padding: '12px 16px',
+                background: 'rgba(212,175,55,0.06)',
+                border: '1px solid rgba(212,175,55,0.2)',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                transition: 'border-color 0.2s ease, background 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(212,175,55,0.45)';
+                e.currentTarget.style.background = 'rgba(212,175,55,0.10)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(212,175,55,0.2)';
+                e.currentTarget.style.background = 'rgba(212,175,55,0.06)';
+              }}
+            >
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 600, color: '#D4AF37', letterSpacing: '0.02em' }}>
+                womeninproductindia.co
+              </span>
+              <svg width="12" height="12" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
+                <path d="M7 17L17 7M17 7H7M17 7v10" />
+              </svg>
+            </motion.a>
           </BentoCard>
         </div>
       </div>
