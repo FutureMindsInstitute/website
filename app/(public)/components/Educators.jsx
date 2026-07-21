@@ -392,67 +392,11 @@ const Educators = () => {
           ))}
         </div>
 
-        {/* Stats row */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, delay: 0.25 }}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '16px',
-            marginTop: '48px',
-          }}
-          className="edu-stats-grid"
-        >
-          {[
-            { value: '25+', label: 'Years Combined Experience' },
-            { value: '1000+', label: 'Students Mentored' },
-            { value: '10+', label: 'Global Companies' },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              style={{
-                background: '#1A2035',
-                border: '1px solid rgba(240,237,230,0.07)',
-                borderRadius: '12px',
-                padding: '28px 20px',
-                textAlign: 'center',
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: 'Bricolage Grotesque, sans-serif',
-                  fontWeight: 800,
-                  fontSize: '32px',
-                  color: '#D4AF37',
-                  lineHeight: 1,
-                  marginBottom: '6px',
-                }}
-              >
-                {stat.value}
-              </div>
-              <div
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '13px',
-                  color: '#6B6B6B',
-                }}
-              >
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </motion.div>
       </div>
 
       <style jsx>{`
         @media (max-width: 768px) {
           .educators-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .edu-stats-grid {
             grid-template-columns: 1fr !important;
           }
         }
