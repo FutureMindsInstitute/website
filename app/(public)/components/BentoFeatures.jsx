@@ -28,12 +28,12 @@ const BarIndicator = ({ bars = 4, delay = 0 }) => (
 
 /* ── Company grid with spring pop ───────────────────── */
 const companies = [
-  { name: 'Google',    logo: '/assets/partners/google.svg' },
-  { name: 'Amazon',   logo: '/assets/partners/amazon.svg' },
-  { name: 'Microsoft',logo: '/assets/partners/microsoft.svg' },
-  { name: 'Meta',     logo: '/assets/partners/meta.svg' },
-  { name: 'Flipkart', logo: '/assets/partners/flipkart.png' },
-  { name: 'PwC',      logo: '/assets/partners/pwc.svg' },
+  { name: 'Google',    logo: '/assets/partners/google.svg',    h: 22 },
+  { name: 'Amazon',   logo: '/assets/partners/amazon.svg',    h: 22 },
+  { name: 'Microsoft',logo: '/assets/partners/microsoft.svg', h: 22 },
+  { name: 'Meta',     logo: '/assets/partners/meta.svg',      h: 22 },
+  { name: 'Flipkart', logo: '/assets/partners/flipkart.png',  h: 32 },
+  { name: 'PwC',      logo: '/assets/partners/pwc.svg',       h: 22 },
 ];
 
 const NetworkCard = () => (
@@ -62,7 +62,7 @@ const NetworkCard = () => (
           src={company.logo}
           alt={company.name}
           style={{
-            height: '22px',
+            height: `${company.h}px`,
             maxWidth: '90px',
             objectFit: 'contain',
             filter: 'brightness(0) invert(1)',
