@@ -3,11 +3,13 @@
 import { motion } from 'framer-motion';
 
 const orgs = [
-  { name: 'Primus Life School', url: 'https://www.primuslife.in/bangalore/', logo: '/assets/partners/primus.png', h: 22 },
-  { name: 'HerKey',             url: 'https://www.herkey.com/',              logo: '/assets/partners/herkey.svg',  h: 20 },
-  { name: 'Dayananda Sagar University', url: 'https://www.dsu.edu.in/',      logo: null },
-  { name: 'UTM',                url: 'https://www.utm.co.in/',               logo: null },
-  { name: 'Marzi',              url: 'https://marzi.life/',                   logo: '/assets/partners/marzi.png',  h: 28 },
+  { name: 'Google',             url: 'https://google.com',                   logo: 'https://logo.clearbit.com/google.com',   h: 22 },
+  { name: 'Swiggy',             url: 'https://swiggy.com',                   logo: 'https://logo.clearbit.com/swiggy.com',   h: 22 },
+  { name: 'Primus Life School', url: 'https://www.primuslife.in/bangalore/', logo: '/assets/partners/primus.png',            h: 22 },
+  { name: 'HerKey',             url: 'https://www.herkey.com/',              logo: '/assets/partners/herkey.svg',            h: 20 },
+  { name: 'Dayananda Sagar University', url: 'https://www.dsu.edu.in/',      logo: 'https://logo.clearbit.com/dsu.edu.in',  h: 22 },
+  { name: 'UTM',                url: 'https://www.utm.co.in/',               logo: 'https://logo.clearbit.com/utm.co.in',   h: 22 },
+  { name: 'Marzi',              url: 'https://marzi.life/',                  logo: '/assets/partners/marzi.png',            h: 28 },
 ];
 
 const TrustedBy = () => (
@@ -64,28 +66,30 @@ const TrustedBy = () => (
             onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
             onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.5'; }}
           >
-            {org.logo ? (
-              <img
-                src={org.logo}
-                alt={org.name}
-                style={{
-                  height: `${org.h}px`,
-                  objectFit: 'contain',
-                  filter: 'brightness(0) invert(1)',
-                  display: 'block',
-                }}
-              />
-            ) : (
-              <span style={{
-                fontFamily: 'Bricolage Grotesque, sans-serif',
-                fontWeight: 700,
-                fontSize: '14px',
-                color: '#F0EDE6',
-                letterSpacing: '-0.01em',
-              }}>
-                {org.name}
-              </span>
-            )}
+            <img
+              src={org.logo}
+              alt={org.name}
+              style={{
+                height: `${org.h}px`,
+                objectFit: 'contain',
+                filter: 'brightness(0) invert(1)',
+                display: 'block',
+              }}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextSibling.style.display = 'block';
+              }}
+            />
+            <span style={{
+              display: 'none',
+              fontFamily: 'Bricolage Grotesque, sans-serif',
+              fontWeight: 700,
+              fontSize: '14px',
+              color: '#F0EDE6',
+              letterSpacing: '-0.01em',
+            }}>
+              {org.name}
+            </span>
           </a>
         ))}
       </motion.div>

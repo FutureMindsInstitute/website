@@ -413,7 +413,9 @@ const Courses = ({ initialCourses = null, initialCategories = null }) => {
     );
   }
 
-  if (error) {
+  const showForm = error || (!loading && courses.length === 0);
+
+  if (showForm) {
     return (
       <section
         id="courses"
@@ -447,66 +449,124 @@ const Courses = ({ initialCourses = null, initialCategories = null }) => {
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
               color: '#F0EDE6',
-              marginBottom: '48px',
-              maxWidth: '600px',
+              marginBottom: '16px',
+              maxWidth: '620px',
             }}
           >
             Your Path to{' '}
             <span style={{ color: '#D4AF37' }}>AI Mastery</span>
           </h2>
-          <div
+          <p
             style={{
-              background: '#111827',
-              border: '1px solid rgba(240,237,230,0.07)',
-              borderLeft: '3px solid #D4AF37',
-              borderRadius: '12px',
-              padding: '40px',
-              maxWidth: '600px',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '16px',
+              color: '#6B6B6B',
+              maxWidth: '520px',
+              lineHeight: 1.65,
+              marginBottom: '56px',
             }}
           >
-            <p
+            Our first course is launching soon. Register your interest below and be the first to know when it goes live.
+          </p>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '40px',
+              alignItems: 'start',
+            }}
+            className="courses-form-grid"
+          >
+            {/* Left — value props */}
+            <div>
+              {[
+                { title: 'Industry-led curriculum', desc: 'Built by professionals from Google, Amazon, Microsoft and more.' },
+                { title: 'Hands-on projects', desc: 'Walk away with portfolio deliverables you can show any employer.' },
+                { title: 'Live cohort sessions', desc: 'Learn in real-time alongside peers, not just recorded videos.' },
+                { title: 'WIP India community', desc: 'Join a network of 500+ AI-forward professionals post-cohort.' },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    gap: '16px',
+                    marginBottom: '28px',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '8px',
+                      background: 'rgba(212,175,55,0.10)',
+                      border: '1px solid rgba(212,175,55,0.22)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <span style={{ color: '#D4AF37', fontSize: '14px', fontWeight: 700 }}>+</span>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: '16px', color: '#F0EDE6', marginBottom: '4px' }}>
+                      {item.title}
+                    </div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#6B6B6B', lineHeight: 1.6 }}>
+                      {item.desc}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Right — Google Form */}
+            <div
               style={{
-                fontFamily: 'Bricolage Grotesque, sans-serif',
-                fontWeight: 700,
-                fontSize: '20px',
-                color: '#F0EDE6',
-                marginBottom: '10px',
+                background: '#111827',
+                border: '1px solid rgba(240,237,230,0.07)',
+                borderRadius: '16px',
+                overflow: 'hidden',
               }}
             >
-              Courses launching soon
-            </p>
-            <p
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '14px',
-                color: '#6B6B6B',
-                lineHeight: 1.65,
-                marginBottom: '20px',
-              }}
-            >
-              Our upcoming cohorts are being finalized. In the meantime, explore the AI Mastery Masterclass, a live intensive session open now.
-            </p>
-            <a
-              href="/ai-mastery"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '10px 22px',
-                background: '#D4AF37',
-                borderRadius: '10px',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '13px',
-                fontWeight: 700,
-                color: '#0B0F1A',
-                textDecoration: 'none',
-              }}
-            >
-              View AI Mastery Masterclass
-              <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" /></svg>
-            </a>
+              <div
+                style={{
+                  padding: '20px 24px',
+                  borderBottom: '1px solid rgba(240,237,230,0.06)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                }}
+              >
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#D4AF37' }} />
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 600, color: '#F0EDE6' }}>
+                  Register Your Interest
+                </span>
+              </div>
+              <iframe
+                src="https://forms.gle/zz8ay8CSEdyZmckH7"
+                width="100%"
+                height="560"
+                frameBorder="0"
+                marginHeight="0"
+                marginWidth="0"
+                style={{ display: 'block', background: 'transparent' }}
+                title="Course Interest Form"
+              >
+                Loading form…
+              </iframe>
+            </div>
           </div>
         </div>
+
+        <style jsx>{`
+          @media (max-width: 768px) {
+            .courses-form-grid {
+              grid-template-columns: 1fr !important;
+            }
+          }
+        `}</style>
       </section>
     );
   }

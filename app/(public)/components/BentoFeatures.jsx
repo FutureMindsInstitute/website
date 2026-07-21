@@ -27,13 +27,21 @@ const BarIndicator = ({ bars = 4, delay = 0 }) => (
 );
 
 /* ── Company grid with spring pop ───────────────────── */
-const companies = ['Google', 'Amazon', 'Microsoft', 'Meta', 'Flipkart', 'PwC'];
+const companies = [
+  { name: 'Google',    logo: 'https://logo.clearbit.com/google.com' },
+  { name: 'Amazon',   logo: 'https://logo.clearbit.com/amazon.com' },
+  { name: 'Microsoft',logo: 'https://logo.clearbit.com/microsoft.com' },
+  { name: 'Meta',     logo: 'https://logo.clearbit.com/meta.com' },
+  { name: 'Flipkart', logo: 'https://logo.clearbit.com/flipkart.com' },
+  { name: 'PwC',      logo: 'https://logo.clearbit.com/pwc.com' },
+  { name: 'HerKey',   logo: '/assets/partners/herkey.svg' },
+];
 
 const NetworkCard = () => (
-  <div style={{ marginTop: '28px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-    {companies.map((name, i) => (
+  <div style={{ marginTop: '28px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+    {companies.map((company, i) => (
       <motion.div
-        key={name}
+        key={company.name}
         initial={{ opacity: 0, scale: 0.7, y: 10 }}
         whileInView={{ opacity: 1, scale: 1, y: 0 }}
         viewport={{ once: true }}
@@ -43,17 +51,40 @@ const NetworkCard = () => (
           background: 'rgba(240,237,230,0.04)',
           border: '1px solid rgba(240,237,230,0.08)',
           borderRadius: '8px',
-          padding: '10px 8px',
-          textAlign: 'center',
-          fontFamily: 'Inter, sans-serif',
-          fontSize: '11px',
-          fontWeight: 600,
-          color: '#6B6B6B',
-          letterSpacing: '0.04em',
+          padding: '14px 10px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '56px',
           cursor: 'default',
         }}
       >
-        {name}
+        <img
+          src={company.logo}
+          alt={company.name}
+          style={{
+            height: '26px',
+            maxWidth: '80px',
+            objectFit: 'contain',
+            filter: 'brightness(0) invert(1)',
+            opacity: 0.8,
+            display: 'block',
+          }}
+          onError={(e) => {
+            e.currentTarget.style.display = 'none';
+            e.currentTarget.nextSibling.style.display = 'block';
+          }}
+        />
+        <span style={{
+          display: 'none',
+          fontFamily: 'Inter, sans-serif',
+          fontSize: '14px',
+          fontWeight: 600,
+          color: '#8A8A8A',
+          letterSpacing: '0.04em',
+        }}>
+          {company.name}
+        </span>
       </motion.div>
     ))}
   </div>
@@ -229,13 +260,13 @@ const BentoCard = ({ children, delay = 0, style = {} }) => (
 const CardHead = ({ tag, title, desc, bars = 4, barDelay = 0 }) => (
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
     <div>
-      <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3A3A3A', marginBottom: '10px' }}>
+      <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3A3A3A', marginBottom: '10px' }}>
         {tag}
       </div>
-      <h3 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: '22px', color: '#F0EDE6', marginBottom: '6px', lineHeight: 1.2 }}>
+      <h3 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: '26px', color: '#F0EDE6', marginBottom: '6px', lineHeight: 1.2 }}>
         {title}
       </h3>
-      <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#6B6B6B', lineHeight: 1.6, maxWidth: '380px' }}>
+      <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', color: '#6B6B6B', lineHeight: 1.6, maxWidth: '380px' }}>
         {desc}
       </p>
     </div>
@@ -262,15 +293,15 @@ const BentoFeatures = () => {
           transition={{ duration: 0.55 }}
           style={{ marginBottom: '48px' }}
         >
-          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#D4AF37', marginBottom: '16px' }}>
+          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#D4AF37', marginBottom: '16px' }}>
             Why FMI
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
-            <h2 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 800, fontSize: 'clamp(30px, 4vw, 48px)', lineHeight: 1.07, letterSpacing: '-0.03em', color: '#F0EDE6', margin: 0 }}>
+            <h2 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 800, fontSize: 'clamp(34px, 4.5vw, 54px)', lineHeight: 1.07, letterSpacing: '-0.03em', color: '#F0EDE6', margin: 0 }}>
               Everything you need to{' '}
               <span style={{ color: '#D4AF37' }}>level up</span>
             </h2>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#6B6B6B', maxWidth: '380px', lineHeight: 1.65, margin: 0 }}>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', color: '#6B6B6B', maxWidth: '380px', lineHeight: 1.65, margin: 0 }}>
               Not just another course. A complete ecosystem for becoming AI-ready.
             </p>
           </div>
@@ -298,22 +329,22 @@ const BentoFeatures = () => {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', alignItems: 'start' }} className="card3-inner">
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3A3A3A' }}>Curriculum</div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3A3A3A' }}>Curriculum</div>
                   <BarIndicator bars={4} delay={0.26} />
                 </div>
-                <h3 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: '22px', color: '#F0EDE6', marginBottom: '6px', lineHeight: 1.2 }}>Industry-First</h3>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#6B6B6B', lineHeight: 1.6 }}>
+                <h3 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: '26px', color: '#F0EDE6', marginBottom: '6px', lineHeight: 1.2 }}>Industry-First</h3>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', color: '#6B6B6B', lineHeight: 1.6 }}>
                   Every topic is drawn from what top companies are actually building today.
                 </p>
                 <CurriculumCard />
               </div>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3A3A3A' }}>Portfolio</div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3A3A3A' }}>Portfolio</div>
                   <BarIndicator bars={3} delay={0.3} />
                 </div>
-                <h3 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: '22px', color: '#F0EDE6', marginBottom: '6px', lineHeight: 1.2 }}>Real Deliverables</h3>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#6B6B6B', lineHeight: 1.6 }}>
+                <h3 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: '26px', color: '#F0EDE6', marginBottom: '6px', lineHeight: 1.2 }}>Real Deliverables</h3>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', color: '#6B6B6B', lineHeight: 1.6 }}>
                   Walk away with projects you can show any employer or client.
                 </p>
                 <PortfolioCard />
